@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EditRouteImport } from './routes/edit'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as WheelsRouteImport } from './routes/wheels'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EditRoute = EditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WheelsRoute = WheelsRouteImport.update({
+  id: '/wheels',
+  path: '/wheels',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/edit': typeof EditRoute
+  '/settings': typeof SettingsRoute
+  '/wheels': typeof WheelsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/edit': typeof EditRoute
+  '/settings': typeof SettingsRoute
+  '/wheels': typeof WheelsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/edit': typeof EditRoute
+  '/settings': typeof SettingsRoute
+  '/wheels': typeof WheelsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/edit' | '/settings' | '/wheels'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/edit' | '/settings' | '/wheels'
+  id: '__root__' | '/' | '/edit' | '/settings' | '/wheels'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EditRoute: typeof EditRoute
+  SettingsRoute: typeof SettingsRoute
+  WheelsRoute: typeof WheelsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/edit': {
+      id: '/edit'
+      path: '/edit'
+      fullPath: '/edit'
+      preLoaderRoute: typeof EditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wheels': {
+      id: '/wheels'
+      path: '/wheels'
+      fullPath: '/wheels'
+      preLoaderRoute: typeof WheelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EditRoute: EditRoute,
+  SettingsRoute: SettingsRoute,
+  WheelsRoute: WheelsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
