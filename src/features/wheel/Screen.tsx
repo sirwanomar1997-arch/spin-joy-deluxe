@@ -3,9 +3,11 @@ import { ArrowLeft, X } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { useWheels } from './context';
-import nightSky from '@/assets/night-sky.jpg';
+import { backgrounds } from './backgrounds';
 export function Backdrop({ children }: { children: ReactNode }) {
-  return <div className="app-backdrop"><img className="sky-texture" src={nightSky} width="1024" height="1536" alt="" fetchPriority="high" />{children}</div>;
+  const { store } = useWheels();
+  const background = backgrounds.find(b => b.id === store.settings.background) ?? backgrounds[0];
+  return <div className={`app-backdrop ${store.settings.reducedMotion ? 'reduced-effects' : ''}`} data-background={background.id}><img key={background.id} className="sky-texture" src={background.image} width="768" height="1152" alt="" fetchPriority="high" />{children}</div>;
 }
 export function StorageError() {
   const { error, clearError } = useWheels();

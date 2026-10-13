@@ -14,3 +14,4 @@
 - Use one pointer-driven requestAnimationFrame rotation owner; derive results from the same final rotation and fixed top pointer, never from a separate random selection.
 - Keep the wheel library in a validated versioned local store shared by a root provider; only update committed UI state after a successful storage write to avoid false save confirmations.
 - Use separate content routes for the wheel, editor, settings and library, with route-specific metadata and a shared visual shell.
+- Keep background assets in a browser-safe catalog and persist validated background IDs in shared settings; migrate older local records without changing saved sound preferences or wheels.

@@ -13,14 +13,16 @@ export function useWheelMotion(segments: string[], sound: boolean) {
   const [winner, setWinner] = useState<string | null>(null);
   const lastTick = useRef(0);
   useEffect(() => () => { cancelAnimationFrame(frame.current); audio.current?.close(); }, []);
-  function paint(angle: number) {
+  function paint(angle: number, speed = 0) {
     const previous = rotation.current;
     rotation.current = angle;
     if (svgRef.current) { svgRef.current.style.transform = `rotate(${angle}deg)`; svgRef.current.dataset['rotation'] = String(angle); }
+    if (sound && speed > 0) audio.current?.updateSpin(speed);
     if (sound && Math.floor(previous / (360 / segments.length)) !== Math.floor(angle / (360 / segments.length)) && performance.now() - lastTick.current > 45) { audio.current?.tick(); lastTick.current = performance.now(); }
   }
   function finish() {
     busy.current = false; setSpinning(false);
+    audio.current?.stopSpin();
     paint(normalize(rotation.current));
     setWinner(segments[winnerIndex(rotation.current, segments.length)]?.trim() || 'TOMT SEGMENT');
     if (sound) audio.current?.finish();
@@ -44,8 +46,9 @@ export function useWheelMotion(segments: string[], sound: boolean) {
     const angle = pointerAngle(event), delta = angleDelta(angle, current.angle);
     current.angle = angle; current.moved += Math.abs(delta);
     if (current.moved > 2) setWinner(null);
-    paint(rotation.current + delta);
     const now = performance.now();
+    const lastSample = current.samples.at(-1);
+    paint(rotation.current + delta, current.moved > 2 ? Math.abs(delta) * 1000 / Math.max(1, now - (lastSample?.time ?? now)) : 0);
     current.samples.push({ time: now, angle: rotation.current });
     current.samples = current.samples.filter(s => now - s.time < 150);
   }
@@ -61,7 +64,7 @@ export function useWheelMotion(segments: string[], sound: boolean) {
     let speed = velocity, last = performance.now();
     function step(now: number) {
       const next = advance(rotation.current, speed, (now - last) / 1000);
-      last = now; speed = next.velocity; paint(next.rotation);
+      last = now; speed = next.velocity; paint(next.rotation, Math.abs(speed));
       if (speed === 0) finish(); else frame.current = requestAnimationFrame(step);
     }
     frame.current = requestAnimationFrame(step);

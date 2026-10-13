@@ -1,8 +1,9 @@
 export type Wheel = { id: string; title: string; segments: string[] };
-export type Settings = { sound: boolean; reducedMotion: boolean };
+export type BackgroundId = 'night' | 'aurora' | 'ocean' | 'forest' | 'satin' | 'mist' | 'nebula' | 'depths';
+export type Settings = { sound: boolean; reducedMotion: boolean; background: BackgroundId };
 export type Store = { version: 1; activeId: string; wheels: Wheel[]; settings: Settings };
 export const STORAGE_KEY = 'spin-wheel-deluxe-v1';
-export const defaults: Settings = { sound: false, reducedMotion: false };
+export const defaults: Settings = { sound: true, reducedMotion: false, background: 'night' };
 export const DEFAULT_WHEEL: Wheel = { id: 'deluxe-original', title: 'WHOOO PAYS?!', segments: ['Rayan', 'Alma', 'Noah', 'Leila', 'Adam', 'Maya', 'Leo', 'Sara', 'Elias', 'Nora', 'Omar', 'Ella'] };
 export function newWheel(): Wheel {
   return { id: crypto.randomUUID(), title: '', segments: Array(8).fill('') };
@@ -18,7 +19,9 @@ export function validateStore(value: unknown): Store {
     if (!w || typeof w.id !== 'string' || typeof w.title !== 'string' || w.title.length > 80 || !Array.isArray(w.segments) || w.segments.length < 1 || w.segments.length > 24 || w.segments.some(s => typeof s !== 'string' || s.length > 60)) throw new Error('Ogiltigt hjul');
   }
   if (new Set(v.wheels.map(w => w.id)).size !== v.wheels.length || !v.wheels.some(w => w.id === v.activeId)) throw new Error('Ogiltigt aktivt hjul');
-  return v as Store;
+  const background = v.settings.background ?? defaults.background;
+  if (!['night', 'aurora', 'ocean', 'forest', 'satin', 'mist', 'nebula', 'depths'].includes(background)) throw new Error('Ogiltig bakgrund');
+  return { ...(v as Store), settings: { ...v.settings, background } };
 }
 export function writeStore(store: Store) {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(validateStore(store)));
