@@ -1,24 +1,22 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
-export const Route = createFileRoute("/")({
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { useState } from 'react';
+import { Settings2, Pencil } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Wheel } from '@/features/wheel/Wheel';
+import { Backdrop, StorageError } from '@/features/wheel/Screen';
+import { useWheels } from '@/features/wheel/context';
+import { DEFAULT_WHEEL } from '@/features/wheel/storage';
+export const Route = createFileRoute('/')({
+  head: () => ({ meta: [{ title: 'Spin the Wheel Deluxe · Ditt lyckohjul' }, { name: 'description', content: 'Ett exklusivt fingerstyrt lyckohjul med fysisk tröghet. Skapa och spara dina egna hjul, utan konto.' }, { property: 'og:title', content: 'Spin the Wheel Deluxe' }, { property: 'og:description', content: 'Dra, släpp och låt hjulet avgöra. Ditt personliga lyckohjul.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' }] }),
   component: Index,
 });
-
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+  const { store, ready } = useWheels();
+  const wheel = store.wheels.find(w => w.id === store.activeId) ?? DEFAULT_WHEEL;
+  const [busy, setBusy] = useState(false);
+  return <div className={store.settings.reducedMotion ? 'reduced-effects' : ''}><Backdrop><main className="home-screen"><header className="home-header">
+    <Button variant="neonWarm" size="deluxeIcon" aria-label="Inställningar" disabled={busy || !ready} asChild={!busy && ready}>{busy || !ready ? <Settings2 /> : <Link to="/settings" aria-label="Inställningar" title="Inställningar"><Settings2 /></Link>}</Button>
+    <div className="title-capsule">{wheel.title && <h1 className={`wheel-title ${wheel.title.length > 22 ? 'wheel-title-long' : ''}`}>{wheel.title}</h1>}</div>
+    <Button variant="neon" size="deluxeIcon" aria-label="Redigera hjul" disabled={busy || !ready} asChild={!busy && ready}>{busy || !ready ? <Pencil /> : <Link to="/edit" aria-label="Redigera hjul" title="Redigera hjul"><Pencil /></Link>}</Button>
+  </header><StorageError />{ready && <Wheel key={`${wheel.id}-${JSON.stringify(wheel.segments)}`} wheel={wheel} sound={store.settings.sound} onBusy={setBusy} />}</main></Backdrop></div>;
 }
