@@ -7,7 +7,7 @@ import { backgrounds } from './backgrounds';
 export function Backdrop({ children }: { children: ReactNode }) {
   const { store } = useWheels();
   const background = backgrounds.find(b => b.id === store.settings.background) ?? backgrounds[0];
-  return <div className={`app-backdrop ${store.settings.reducedMotion ? 'reduced-effects' : ''}`} data-background={background.id}><img key={background.id} className="sky-texture" src={background.image} width="768" height="1152" alt="" fetchPriority="high" />{children}</div>;
+  return <div className={`app-backdrop ${store.settings.reducedMotion ? 'reduced-effects' : ''}`} data-background={background.id}><div className="star-sky"><img className="sky-texture" src={background.image} width="736" height="1472" alt="" fetchPriority="high" /><svg className="living-stars" viewBox="0 0 1000 1600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">{Array.from({ length: 44 }, (_, i) => <circle key={i} cx={(i * 137.5 + 71) % 1000} cy={(i * 271 + 43) % 1600} r={i % 5 === 0 ? 1.5 : .8} />)}</svg></div>{children}</div>;
 }
 export function StorageError() {
   const { error, clearError } = useWheels();

@@ -14,14 +14,16 @@ export function Wheel({ wheel, sound, onBusy }: { wheel: WheelConfig; sound: boo
       <div className="wheel-surface" aria-label="Lyckohjul" {...motion.handlers} data-spinning={motion.spinning}>
         <svg ref={motion.svgRef} className="rotating-wheel" viewBox="0 0 600 600" role="img" aria-label={`${count} lika stora segment`} data-rotation="0">
           <defs>
-            <linearGradient id={`${uid}-rim`} x1="0" y1="0" x2="1" y2="1"><stop className="gold-deep" offset="0" /><stop className="gold-light" offset=".2" /><stop className="gold-deep" offset=".4" /><stop className="gold-bright" offset=".62" /><stop className="gold-light" offset=".78" /><stop className="gold-deep" offset="1" /></linearGradient>
+            <linearGradient id={`${uid}-rim`} x1="0" y1="0" x2="1" y2="1"><stop className="metal-medium" offset="0" /><stop className="metal-light" offset=".18" /><stop className="metal-dark" offset=".36" /><stop className="metal-medium" offset=".65" /><stop className="metal-light" offset=".82" /><stop className="metal-dark" offset="1" /></linearGradient>
+            {Array.from({ length: 7 }, (_, i) => <radialGradient key={i} id={`${uid}-enamel-${i}`} cx=".38" cy=".28" r=".8"><stop className={`enamel-light segment-${i}`} offset="0" /><stop className={`enamel-base segment-${i}`} offset=".55" /><stop className={`enamel-deep segment-${i}`} offset="1" /></radialGradient>)}
             <radialGradient id={`${uid}-glass`} cx=".35" cy=".2" r=".9"><stop className="glass-highlight" offset="0" /><stop className="glass-clear" offset=".4" /><stop className="glass-shadow" offset="1" /></radialGradient>
             <linearGradient id={`${uid}-hub`} x1="0" y1="0" x2="1" y2="1"><stop className="metal-medium" offset="0" /><stop className="metal-dark" offset=".4" /><stop className="metal-medium" offset=".51" /><stop className="metal-dark" offset=".7" /><stop className="metal-medium" offset="1" /></linearGradient>
             <linearGradient id={`${uid}-peg`} x1="0" y1="0" x2="1" y2="1"><stop className="metal-light" offset="0" /><stop className="metal-dark" offset=".45" /><stop className="metal-medium" offset=".7" /><stop className="metal-dark" offset="1" /></linearGradient>
             {wheel.segments.map((_, i) => <clipPath id={`${uid}-clip-${i}`} key={i}><path d={segmentPath(i, count)} /></clipPath>)}
           </defs>
           <circle cx="300" cy="300" r="293" fill={`url(#${uid}-rim)`} className="rim-outline" />
-          <circle cx="300" cy="300" r="288" className="rim-engraving" />
+          <circle cx="300" cy="300" r="290" className="rim-hairline" />
+          <circle cx="300" cy="300" r="284" className="rim-inlay" />
           <circle cx="300" cy="300" r="282" className="inner-rim" />
           {wheel.segments.map((label, i) => {
             const middle = -90 + (i + .5) * 360 / count;
@@ -31,19 +33,17 @@ export function Wheel({ wheel, sound, onBusy }: { wheel: WheelConfig; sound: boo
             const fontSize = Math.min(count > 16 ? 23 : count > 12 ? 28 : 34, 158 / Math.max(text.length * .66, 1), count === 1 ? 34 : 2 * 108 * Math.sin(Math.PI / count) * .8);
             const color = i === count - 1 && i % 7 === 0 ? 3 : i % 7;
             return <g key={i}>
-              <path d={segmentPath(i, count)} className={`segment segment-${color}`} />
+              <path d={segmentPath(i, count)} className="segment" fill={`url(#${uid}-enamel-${color})`} />
               <path d={segmentPath(i, count)} fill={`url(#${uid}-glass)`} className="segment-reflection" />
+              <path d={segmentPath(i, count)} className="segment-bevel" />
               <g clipPath={`url(#${uid}-clip-${i})`}><text x={pos.x} y={pos.y} fontSize={fontSize} transform={`rotate(${middle + (left ? 180 : 0)} ${pos.x} ${pos.y})`} textAnchor="middle" dominantBaseline="central" className="segment-label">{text}</text></g>
             </g>;
           })}
           <circle cx="300" cy="300" r="280" className="segment-inner-edge" />
-          {count > 1 && wheel.segments.map((_, i) => {
-            const angle = -90 + i * 360 / count;
-            const pos = point(angle, 282);
-            return <g key={i} transform={`translate(${pos.x} ${pos.y}) rotate(${angle + 90})`}><rect x="-6" y="-13" width="12" height="28" rx="6" fill={`url(#${uid}-peg)`} className="peg" /><circle cy="-6" r="2" className="peg-highlight" /></g>;
-          })}
+          <circle cx="300" cy="300" r="277" className="face-hairline" />
           <circle cx="300" cy="304" r="76" className="hub-shadow" />
           <circle cx="300" cy="300" r="73" fill={`url(#${uid}-rim)`} className="hub-edge" />
+          <circle cx="300" cy="300" r="70" className="hub-inlay" />
           <circle cx="300" cy="300" r="68" fill={`url(#${uid}-hub)`} />
           <circle cx="300" cy="300" r="64" className="hub-hairline" />
           <path d="M257 275 A50 50 0 0 1 328 258" className="hub-reflection" />
