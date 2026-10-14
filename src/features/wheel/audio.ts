@@ -4,7 +4,15 @@ export class WheelAudio {
   private spinGain: GainNode | null = null;
   private spinFilter: BiquadFilterNode | null = null;
   unlock() {
-    try { this.context ??= new AudioContext(); void this.context.resume().catch(() => {}); } catch { /* Audio is optional. */ }
+    try {
+      this.context ??= new AudioContext();
+      void this.context.resume().catch(() => {});
+      // Prime mobile audio hardware inside the pointer gesture, without audible autoplay.
+      const source = this.context.createBufferSource();
+      source.buffer = this.context.createBuffer(1, 1, this.context.sampleRate);
+      source.connect(this.context.destination); source.start();
+      source.onended = () => source.disconnect();
+    } catch { /* Audio is optional. */ }
   }
   tone(frequency: number, duration: number, gain: number, offset = 0) {
     const ctx = this.context;
