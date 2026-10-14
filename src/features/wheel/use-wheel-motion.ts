@@ -65,10 +65,23 @@ export function useWheelMotion(segments: string[], sound: boolean) {
     if (Math.abs(velocity) <= STOP_SPEED) { finish(); return; }
     busy.current = true; setSpinning(true);
     let speed = velocity, last = performance.now();
+    let settlingAt: number | null = null;
+    let settledDeflection = 0;
     function step(now: number) {
+      if (settlingAt !== null) {
+        const progress = Math.min(1, (now - settlingAt) / 240);
+        pointerRef.current?.setAttribute('transform', `rotate(${settledDeflection * (1 - progress) ** 3} 32 18)`);
+        if (progress === 1) finish(); else frame.current = requestAnimationFrame(step);
+        return;
+      }
+      const previous = rotation.current;
       const next = advance(rotation.current, speed, (now - last) / 1000);
       last = now; speed = next.velocity; paint(next.rotation, Math.abs(speed));
-      if (speed === 0) finish(); else frame.current = requestAnimationFrame(step);
+      if (speed === 0) {
+        settledDeflection = pointerDeflection(next.rotation, segments.length, next.rotation - previous);
+        settlingAt = now;
+      }
+      frame.current = requestAnimationFrame(step);
     }
     frame.current = requestAnimationFrame(step);
   }
