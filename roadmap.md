@@ -16,5 +16,5 @@
 - [x] Clone the project onto the Mac from the public GitHub repository.
 - [x] Generate the iOS app icon, then archive and upload to App Store Connect.
 - [x] Fill in the iOS app listing and submit it for review.
-- [pågår] Upload .aab to Play Console: create app, store listing (ikon 1024×1024 + funktionsbild 1024×500), production release (app-release.aab från Desktop), pris 20 kr, åldersklassning, integritetspolicy https://spin-joy-deluxe.lovable.app/privacy, skicka till granskning.
+- [pågår] Upload .aab to Play Console: app-buildat och app-release.aab ligger i Dokument; nästa steg create app, store listing (ikon 1024×1024 + funktionsbild 1024×500), production release, pris 20 kr, åldersklassning, integritetspolicy https://spin-joy-deluxe.lovable.app/privacy, skicka till granskning.
 - [ ] Submit both stores for review with price 20 SEK, age 13+, privacy link.
