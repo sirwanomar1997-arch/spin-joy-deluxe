@@ -20,3 +20,6 @@
 - Keep a browser-safe background catalog using one photo with token-based color treatments and deterministic decorative SVG stars; persist validated IDs and preserve older sound preferences and wheels during migration.
 - Unlock wheel audio on activation events (pointerup/touchend/click/keydown), not only touch pointerdown, and set iOS audioSession to playback so phones actually play sound.
 - Motion-hook module reloads the page on hot updates because hook-order changes break hot-swapped wheels.
+- Wheel context module reloads the page on hot updates so provider and consumers cannot retain different context identities.
+- Enable viewport-fit=cover and add safe-area insets to screen spacing so native iOS overlays never cover navigation.
+- Migrate only an exact untouched legacy starter wheel during validated storage loading; persist migration before committing UI state to preserve custom wheels and honest storage handling.
