@@ -93,3 +93,5 @@ export function useWheelMotion(segments: string[], sound: boolean) {
   }
   return { svgRef, pointerRef, spinning, winner, handlers: { onPointerDown, onPointerMove, onPointerUp: (e: PointerEvent<HTMLDivElement>) => release(e), onPointerCancel: (e: PointerEvent<HTMLDivElement>) => release(e, true), onLostPointerCapture: (e: PointerEvent<HTMLDivElement>) => { if (drag.current) release(e, true); } } };
 }
+// Hook-order changes cannot be hot-swapped into a mounted wheel; reload the page instead.
+if (import.meta.hot) import.meta.hot.accept(() => window.location.reload());
