@@ -15,6 +15,6 @@
 - [x] Package the app for App Store and Google Play: icon, splash, one-command setup, store guide.
 - [x] Clone the project onto the Mac from the public GitHub repository.
 - [x] Generate the iOS app icon, then archive and upload to App Store Connect.
-- [pågår] Fill in the iOS app listing and submit it for review.
-- [ ] Build and upload the Android app bundle to Google Play.
+- [x] Fill in the iOS app listing and submit it for review.
+- [pågår] Build and upload the Android app bundle to Google Play.
 - [ ] Submit both stores for review with price 20 SEK, age 13+, privacy link.
