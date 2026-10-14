@@ -64,7 +64,7 @@
   --sky-onyx: oklch(.19 .012 260);
   --sky-silver: oklch(.32 .025 255);
   --sky-ruby: oklch(.28 .07 355);
-  --sky-sapphire: oklch(.29 .09 250);
+  --sky-rose: oklch(.34 .105 350);
   --sky-tone: var(--sky-night);
   --sky-filter: saturate(.7);
   --rim-glow: 0 0 2px color-mix(in oklab, var(--metal-light) 70%, transparent), 0 0 38px color-mix(in oklab, var(--primary) 22%, transparent), 0 22px 45px color-mix(in oklab, var(--shadow) 85%, transparent);
@@ -86,7 +86,7 @@
 [data-background="satin"] { --sky-tone: var(--sky-onyx); --sky-filter: grayscale(.95) brightness(.8); }
 [data-background="mist"] { --sky-tone: var(--sky-silver); --sky-filter: grayscale(.85); }
 [data-background="nebula"] { --sky-tone: var(--sky-ruby); --sky-filter: hue-rotate(112deg) saturate(.7); }
-[data-background="depths"] { --sky-tone: var(--sky-sapphire); --sky-filter: saturate(1.15); }
+[data-background="depths"] { --sky-tone: var(--sky-rose); --sky-filter: grayscale(.8); --star-halo: var(--gold-light); }
 .star-sky { position: fixed; inset: 0; z-index: -2; pointer-events: none; overflow: hidden; background: var(--sky-tone); }
 .star-sky::after { content: ''; position: absolute; inset: 0; background: linear-gradient(color-mix(in oklab, var(--shadow) 12%, transparent), color-mix(in oklab, var(--shadow) 28%, transparent)); }
 .sky-texture { position: absolute; inset: 0; height: 100%; width: 100%; object-fit: cover; opacity: .8; filter: var(--sky-filter); mix-blend-mode: luminosity; pointer-events: none; animation: sky-breathe 28s ease-in-out infinite alternate; }
@@ -114,17 +114,18 @@
 .result-space { height: 161px; flex: 0 0 161px; display: flex; justify-content: center; align-items: end; padding-bottom: 31px; width: 100%; }
 .winner-name { max-width: 95%; text-align: center; font: 600 57px/1.08 var(--font-display); color: var(--gold-light); overflow-wrap: anywhere; text-shadow: 0 0 8px color-mix(in oklab, var(--gold) 65%, transparent), 0 0 25px color-mix(in oklab, var(--gold) 30%, transparent); animation: winner-in .65s ease-out; }
 .winner-long { font-size: 28px; }
-.winner-rule { height: 1px; width: 92%; margin: 12px auto 0; background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent); box-shadow: 0 0 9px var(--gold); }
+.winner-rule { position: relative; height: 3px; width: min(88%, 280px); min-width: 90px; margin: 15px auto 0; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--gold-deep) 8%, var(--gold) 25%, var(--gold-light) 50%, var(--gold) 75%, var(--gold-deep) 92%, transparent); box-shadow: 0 1px 0 var(--gold-deep), 0 0 12px color-mix(in oklab, var(--gold) 65%, transparent); }
+.winner-rule::after { content: ''; position: absolute; width: 7px; height: 7px; top: -2px; left: calc(50% - 3.5px); transform: rotate(45deg); background: var(--gold-light); border: 1px solid var(--gold); box-shadow: 0 0 8px color-mix(in oklab, var(--gold) 60%, transparent); }
 .wheel-stage { position: relative; width: min(100%, 610px, calc(100svh - 275px)); aspect-ratio: 1; }
 .wheel-surface { width: 100%; height: 100%; border-radius: 50%; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; box-shadow: var(--rim-glow); transition: box-shadow 1s ease; }
-.wheel-stage::after { content: ''; position: absolute; inset: -.8%; border-radius: 50%; border: 1px solid color-mix(in oklab, var(--metal-light) 25%, transparent); pointer-events: none; }
+.wheel-stage::after { content: ''; position: absolute; inset: -.8%; border-radius: 50%; border: 1px solid color-mix(in oklab, var(--gold) 45%, transparent); pointer-events: none; }
 .has-winner .wheel-surface { box-shadow: var(--winner-glow); }
 .wheel-surface:active { cursor: grabbing; }
 .is-spinning .wheel-surface { cursor: wait; }
 .rotating-wheel { width: 100%; height: 100%; display: block; will-change: transform; overflow: visible; }
 .rim-outline { stroke: var(--metal-light); stroke-width: 1.3; }
 .rim-hairline { fill: none; stroke: color-mix(in oklab, var(--light) 45%, transparent); stroke-width: .65; }
-.rim-inlay { fill: none; stroke: color-mix(in oklab, var(--gold) 50%, var(--metal-medium)); stroke-width: 1; }
+.rim-inlay { fill: none; stroke: var(--gold); stroke-width: 1.5; }
 .inner-rim { fill: var(--metal-dark); }
 .segment { stroke: var(--metal-dark); stroke-width: 3; stroke-linejoin: round; }
 .segment-bevel { fill: none; stroke: color-mix(in oklab, var(--light) 26%, transparent); stroke-width: 1; }
@@ -141,6 +142,7 @@
 .segment-6 { --segment-color: var(--segment-6); fill: var(--segment-6); }
 .segment-reflection { stroke: none; }
 .segment-label { fill: var(--segment-ink); font-family: var(--font-display); font-weight: 700; pointer-events: none; paint-order: stroke fill; stroke: color-mix(in oklab, var(--light) 22%, transparent); stroke-width: .6; }
+.segment-emoji { font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; font-weight: 400; stroke: none; }
 .segment-inner-edge { fill: none; stroke: color-mix(in oklab, var(--light) 35%, transparent); stroke-width: 1.5; }
 .metal-dark { stop-color: var(--metal-dark); }
 .metal-medium { stop-color: var(--metal-medium); }
@@ -182,6 +184,7 @@
 .stepper input::-webkit-inner-spin-button { appearance: none; }
 .segment-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
 .segment-field { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.segment-field .deluxe-input { height: 54px; font-size: 21px; font-family: var(--font-sans), 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'; }
 .segment-number { width: 28px; flex-shrink: 0; font: 500 12px var(--font-display); color: var(--segment-color); border-left: 2px solid var(--segment-color); padding-left: 8px; }
 .editor-footer { padding: 30px 0 0; margin-top: 30px; border-top: 1px solid var(--border); }
 .settings-body { padding-top: 35px; }

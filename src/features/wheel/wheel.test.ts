@@ -2,6 +2,11 @@ import { describe, it, expect, vi } from 'vitest';
 import { normalize, angleDelta, winnerIndex, segmentPath, pointerDeflection } from './geometry';
 import { advance, releaseVelocity, FRICTION, STOP_SPEED } from './physics';
 import { initialStore, validateStore, writeStore, STORAGE_KEY } from './storage';
+import { labelMetrics } from './labels';
+describe('emoji labels', () => {
+  it('keeps joined emojis intact and makes them larger than surrounding text', () => { const m=labelMetrics('Alma 👨‍👩‍👧‍👦',12); expect(m.glyphs.filter(g=>g.emoji).map(g=>g.text)).toEqual(['👨‍👩‍👧‍👦']); expect(m.emojiSize).toBeGreaterThan(m.fontSize); });
+  it('fits emoji-only labels in a narrow wedge', () => { const m=labelMetrics('🎉',24); expect(m.emojiSize).toBeLessThanOrEqual(2*108*Math.sin(Math.PI/24)*.8); expect(m.fontSize).toBeGreaterThan(0); });
+});
 describe('wheel geometry', () => {
   it('normalizes signed rotations and many revolutions', () => { expect(normalize(-721)).toBe(359); expect(normalize(1081)).toBe(1); });
   it('crosses zero smoothly in both directions', () => { expect(angleDelta(1,359)).toBe(2); expect(angleDelta(359,1)).toBe(-2); });
