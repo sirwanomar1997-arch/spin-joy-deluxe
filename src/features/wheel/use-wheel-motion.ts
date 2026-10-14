@@ -18,7 +18,7 @@ export function useWheelMotion(segments: string[], sound: boolean) {
   useEffect(() => {
     if (!sound) return;
     const wake = () => { audio.current ??= new WheelAudio(); audio.current.unlock(); };
-    const events = ['pointerup', 'touchend', 'click', 'keydown'] as const;
+    const events = ['pointerdown', 'touchstart', 'pointerup', 'touchend', 'click', 'keydown'] as const;
     events.forEach(name => window.addEventListener(name, wake, { passive: true }));
     return () => events.forEach(name => window.removeEventListener(name, wake));
   }, [sound]);
@@ -27,7 +27,7 @@ export function useWheelMotion(segments: string[], sound: boolean) {
     rotation.current = angle;
     if (svgRef.current) { svgRef.current.style.transform = `rotate(${angle}deg)`; svgRef.current.dataset['rotation'] = String(angle); }
     pointerRef.current?.setAttribute('transform', `rotate(${pointerDeflection(angle, segments.length, angle - previous)} 32 18)`);
-    if (sound && Math.floor(previous / (360 / segments.length)) !== Math.floor(angle / (360 / segments.length)) && performance.now() - lastTick.current > 45) { audio.current?.tick(); lastTick.current = performance.now(); }
+    if (sound && Math.floor(previous / (360 / segments.length)) !== Math.floor(angle / (360 / segments.length)) && performance.now() - lastTick.current > 45) { audio.current ??= new WheelAudio(); audio.current.unlock(); audio.current.tick(); lastTick.current = performance.now(); }
   }
   function finish() {
     busy.current = false; setSpinning(false);
