@@ -1,3 +1,5 @@
+// @refresh reset
+// Motion-hook updates must remount the wheel instead of reusing an older hook queue.
 import { useId } from 'react';
 import { point, segmentPath } from './geometry';
 import { useWheelMotion } from './use-wheel-motion';
