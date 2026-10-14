@@ -23,5 +23,6 @@ export function StorageError() {
   return <div className="storage-error" role="alert"><span>{message}</span><Button variant="ghost" size="icon" aria-label={t.closeError} onClick={clearError}><X /></Button></div>;
 }
 export function Screen({ title, eyebrow, children, action }: { title: string; eyebrow: string; children: ReactNode; action?: ReactNode }) {
-  return <Backdrop><main className="secondary-screen"><header className="screen-header"><Button variant="outline" size="icon" asChild><Link to="/" aria-label="Tillbaka till hjulet"><ArrowLeft /></Link></Button><div><p className="eyebrow">{eyebrow}</p><h1>{title}</h1></div>{action}</header><StorageError />{children}</main></Backdrop>;
+  const t = useT();
+  return <Backdrop><main className="secondary-screen"><header className="screen-header"><Button variant="outline" size="icon" asChild><Link to="/" aria-label={t.backToWheel}><ArrowLeft /></Link></Button><div><p className="eyebrow">{eyebrow}</p><h1>{title}</h1></div>{action}</header><StorageError />{children}</main></Backdrop>;
 }
