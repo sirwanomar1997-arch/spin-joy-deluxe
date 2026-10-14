@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EditRouteImport } from './routes/edit'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as WheelsRouteImport } from './routes/wheels'
 
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 const EditRoute = EditRouteImport.update({
   id: '/edit',
   path: '/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -38,12 +44,14 @@ const WheelsRoute = WheelsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/edit': typeof EditRoute
+  '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
   '/wheels': typeof WheelsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/edit': typeof EditRoute
+  '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
   '/wheels': typeof WheelsRoute
 }
@@ -51,20 +59,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/edit': typeof EditRoute
+  '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
   '/wheels': typeof WheelsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/edit' | '/settings' | '/wheels'
+  fullPaths: '/' | '/edit' | '/privacy' | '/settings' | '/wheels'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/edit' | '/settings' | '/wheels'
-  id: '__root__' | '/' | '/edit' | '/settings' | '/wheels'
+  to: '/' | '/edit' | '/privacy' | '/settings' | '/wheels'
+  id: '__root__' | '/' | '/edit' | '/privacy' | '/settings' | '/wheels'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EditRoute: typeof EditRoute
+  PrivacyRoute: typeof PrivacyRoute
   SettingsRoute: typeof SettingsRoute
   WheelsRoute: typeof WheelsRoute
 }
@@ -83,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/edit'
       fullPath: '/edit'
       preLoaderRoute: typeof EditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -105,6 +122,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EditRoute: EditRoute,
+  PrivacyRoute: PrivacyRoute,
   SettingsRoute: SettingsRoute,
   WheelsRoute: WheelsRoute,
 }
