@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type PointerEvent } from 'react';
 import { angleDelta, pointerDeflection, winnerIndex } from './geometry';
 import { advance, releaseVelocity, STOP_SPEED, type Sample } from './physics';
 import { WheelAudio } from './audio';
+import { detectLang, translations } from './i18n';
 export function useWheelMotion(segments: string[], sound: boolean) {
   const svgRef = useRef<SVGSVGElement>(null);
   const pointerRef = useRef<SVGGElement>(null);
@@ -33,7 +34,7 @@ export function useWheelMotion(segments: string[], sound: boolean) {
     busy.current = false; setSpinning(false);
     // Keep the exact final angle: no rebase, snapping or extra turn at rest.
     pointerRef.current?.setAttribute('transform', 'rotate(0 32 18)');
-    setWinner(segments[winnerIndex(rotation.current, segments.length)]?.trim() || 'TOMT SEGMENT');
+    setWinner(segments[winnerIndex(rotation.current, segments.length)]?.trim() || translations[detectLang()].emptySegment);
     if (sound) audio.current?.finish();
   }
   function pointerAngle(event: PointerEvent<HTMLDivElement>) {
