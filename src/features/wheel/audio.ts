@@ -33,7 +33,7 @@ export class WheelAudio {
   tick() {
     const ctx = this.context;
     if (!ctx || ctx.state === 'closed') return;
-    const play = () => { this.tone(520, .075, .28, 0, 'triangle'); this.tone(1560, .045, .085); };
+    const play = () => { this.tone(420, .08, .3, 0, 'triangle'); this.tone(1260, .05, .09); };
     // Mobile browsers may interrupt audio when backgrounded; recover on the next pin contact.
     if (ctx.state !== 'running') { void ctx.resume().then(play).catch(() => {}); return; }
     play();
