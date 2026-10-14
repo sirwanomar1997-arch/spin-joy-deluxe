@@ -2,8 +2,12 @@ export class WheelAudio {
   private context: AudioContext | null = null;
   unlock() {
     try {
+      // iOS: play through the silent switch like a media app instead of as a muted ringer sound.
+      const session = (globalThis.navigator as (Navigator & { audioSession?: { type: string } }) | undefined)?.audioSession;
+      if (session && session.type !== 'playback') session.type = 'playback';
       if (!this.context || this.context.state === 'closed') {
-        this.context = new AudioContext({ latencyHint: 'interactive' });
+        const Ctx = globalThis.AudioContext ?? (globalThis as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+        this.context = new Ctx({ latencyHint: 'interactive' });
       }
       void this.context.resume().catch(() => {});
       // Prime mobile audio hardware inside the pointer gesture, without audible autoplay.
@@ -15,7 +19,8 @@ export class WheelAudio {
   }
   tone(frequency: number, duration: number, gain: number, offset = 0, type: OscillatorType = 'sine') {
     const ctx = this.context;
-    if (!ctx || ctx.state !== 'running') return;
+    if (!ctx || ctx.state === 'closed') return;
+    if (ctx.state !== 'running') void ctx.resume().catch(() => {});
     const oscillator = ctx.createOscillator();
     const envelope = ctx.createGain();
     const start = ctx.currentTime + offset;

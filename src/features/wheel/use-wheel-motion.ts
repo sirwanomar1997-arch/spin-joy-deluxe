@@ -14,6 +14,14 @@ export function useWheelMotion(segments: string[], sound: boolean) {
   const [winner, setWinner] = useState<string | null>(null);
   const lastTick = useRef(0);
   useEffect(() => () => { cancelAnimationFrame(frame.current); audio.current?.close(); }, []);
+  // Touch pointerdown is not a user activation in mobile browsers; touchend/pointerup/click are.
+  useEffect(() => {
+    if (!sound) return;
+    const wake = () => { audio.current ??= new WheelAudio(); audio.current.unlock(); };
+    const events = ['pointerup', 'touchend', 'click', 'keydown'] as const;
+    events.forEach(name => window.addEventListener(name, wake, { passive: true }));
+    return () => events.forEach(name => window.removeEventListener(name, wake));
+  }, [sound]);
   function paint(angle: number) {
     const previous = rotation.current;
     rotation.current = angle;
@@ -56,6 +64,7 @@ export function useWheelMotion(segments: string[], sound: boolean) {
     const current = drag.current;
     if (!current || current.id !== event.pointerId) return;
     drag.current = null;
+    if (sound) { audio.current ??= new WheelAudio(); audio.current.unlock(); }
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
     if (current.moved <= 2) return;
     const velocity = cancelled ? 0 : releaseVelocity(current.samples, performance.now());
