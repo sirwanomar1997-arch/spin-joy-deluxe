@@ -18,3 +18,4 @@
 - Keep the wheel library in a validated versioned local store shared by a root provider; only update committed UI state after a successful storage write to avoid false save confirmations.
 - Use separate content routes for the wheel, editor, settings and library, with route-specific metadata and a shared visual shell.
 - Keep a browser-safe background catalog using one photo with token-based color treatments and deterministic decorative SVG stars; persist validated IDs and preserve older sound preferences and wheels during migration.
+- Unlock wheel audio on activation events (pointerup/touchend/click/keydown), not only touch pointerdown, and set iOS audioSession to playback so phones actually play sound.
