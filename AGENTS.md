@@ -19,3 +19,4 @@
 - Use separate content routes for the wheel, editor, settings and library, with route-specific metadata and a shared visual shell.
 - Keep a browser-safe background catalog using one photo with token-based color treatments and deterministic decorative SVG stars; persist validated IDs and preserve older sound preferences and wheels during migration.
 - Unlock wheel audio on activation events (pointerup/touchend/click/keydown), not only touch pointerdown, and set iOS audioSession to playback so phones actually play sound.
+- Motion-hook module declines hot updates (full reload) because hook-order changes break hot-swapped wheels.
