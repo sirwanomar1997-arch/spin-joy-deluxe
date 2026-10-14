@@ -16,5 +16,5 @@
 - [x] Clone the project onto the Mac from the public GitHub repository.
 - [x] Generate the iOS app icon, then archive and upload to App Store Connect.
 - [x] Fill in the iOS app listing and submit it for review.
-- [pågår] Google Play: checklistan 13/13 klar. Rätt appfil (18 408 433 byte) kopierad till ~/Documents/spin-joy-deluxe-1.0.aab för iCloud-synk till mobilen. Uppladdningsnyckelbyte godkänt, gäller fredag 16 okt kl 19:08. Då: Testa och lansera → Produktion → Skapa ny release, ladda upp den filen, skicka till granskning. Nytt personligt konto kan kräva slutet test med 12 testare i 14 dagar före produktion.
+- [pågår] Google Play: checklistan 13/13 klar. Rätt appfil (18 408 433 byte) kopierad till ~/Documents/spin-joy-deluxe-1.0.aab och bekräftad synkad till mobilen (Filer → Dokument, 18,4 MB, kl 19:35). Uppladdningsnyckelbyte godkänt, gäller fredag 16 okt kl 19:08. Då: Testa och lansera → Produktion → Skapa ny release, ladda upp den filen, skicka till granskning. Nytt personligt konto kan kräva slutet test med 12 testare i 14 dagar före produktion.
 - [ ] Submit both stores for review with price 20 SEK, age 13+, privacy link.
