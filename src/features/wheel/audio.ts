@@ -2,7 +2,9 @@ export class WheelAudio {
   private context: AudioContext | null = null;
   unlock() {
     try {
-      this.context ??= new AudioContext();
+      if (!this.context || this.context.state === 'closed') {
+        this.context = new AudioContext({ latencyHint: 'interactive' });
+      }
       void this.context.resume().catch(() => {});
       // Prime mobile audio hardware inside the pointer gesture, without audible autoplay.
       const source = this.context.createBufferSource();
@@ -11,19 +13,26 @@ export class WheelAudio {
       source.onended = () => source.disconnect();
     } catch { /* Audio is optional. */ }
   }
-  tone(frequency: number, duration: number, gain: number, offset = 0) {
+  tone(frequency: number, duration: number, gain: number, offset = 0, type: OscillatorType = 'sine') {
     const ctx = this.context;
     if (!ctx || ctx.state !== 'running') return;
     const oscillator = ctx.createOscillator();
     const envelope = ctx.createGain();
     const start = ctx.currentTime + offset;
-    oscillator.type = 'sine'; oscillator.frequency.setValueAtTime(frequency, start);
-    envelope.gain.setValueAtTime(0.0001, start); envelope.gain.exponentialRampToValueAtTime(gain, start + .006); envelope.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+    oscillator.type = type; oscillator.frequency.setValueAtTime(frequency, start);
+    envelope.gain.setValueAtTime(0.0001, start); envelope.gain.exponentialRampToValueAtTime(gain, start + (type === 'triangle' ? .002 : .006)); envelope.gain.exponentialRampToValueAtTime(0.0001, start + duration);
     oscillator.connect(envelope); envelope.connect(ctx.destination);
     oscillator.start(start); oscillator.stop(start + duration);
     oscillator.onended = () => { oscillator.disconnect(); envelope.disconnect(); };
   }
-  tick() { this.tone(520, .055, .12); this.tone(1560, .03, .035); }
+  tick() {
+    const ctx = this.context;
+    if (!ctx || ctx.state === 'closed') return;
+    const play = () => { this.tone(520, .075, .28, 0, 'triangle'); this.tone(1560, .045, .085); };
+    // Mobile browsers may interrupt audio when backgrounded; recover on the next pin contact.
+    if (ctx.state !== 'running') { void ctx.resume().then(play).catch(() => {}); return; }
+    play();
+  }
   finish() {
     // A soft ascending bell phrase, with restrained harmonics and a warm final chord.
     [523.25, 659.25, 783.99, 1046.5].forEach((note, i) => {
