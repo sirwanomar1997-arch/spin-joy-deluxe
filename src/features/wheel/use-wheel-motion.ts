@@ -14,17 +14,15 @@ export function useWheelMotion(segments: string[], sound: boolean) {
   const [winner, setWinner] = useState<string | null>(null);
   const lastTick = useRef(0);
   useEffect(() => () => { cancelAnimationFrame(frame.current); audio.current?.close(); }, []);
-  function paint(angle: number, speed = 0) {
+  function paint(angle: number) {
     const previous = rotation.current;
     rotation.current = angle;
     if (svgRef.current) { svgRef.current.style.transform = `rotate(${angle}deg)`; svgRef.current.dataset['rotation'] = String(angle); }
     pointerRef.current?.setAttribute('transform', `rotate(${pointerDeflection(angle, segments.length, angle - previous)} 32 18)`);
-    if (sound && speed > 0) audio.current?.updateSpin(speed);
     if (sound && Math.floor(previous / (360 / segments.length)) !== Math.floor(angle / (360 / segments.length)) && performance.now() - lastTick.current > 45) { audio.current?.tick(); lastTick.current = performance.now(); }
   }
   function finish() {
     busy.current = false; setSpinning(false);
-    audio.current?.stopSpin();
     // Keep the exact final angle: no rebase, snapping or extra turn at rest.
     pointerRef.current?.setAttribute('transform', 'rotate(0 32 18)');
     setWinner(segments[winnerIndex(rotation.current, segments.length)]?.trim() || 'TOMT SEGMENT');
@@ -50,8 +48,7 @@ export function useWheelMotion(segments: string[], sound: boolean) {
     current.angle = angle; current.moved += Math.abs(delta);
     if (current.moved > 2) setWinner(null);
     const now = performance.now();
-    const lastSample = current.samples.at(-1);
-    paint(rotation.current + delta, current.moved > 2 ? Math.abs(delta) * 1000 / Math.max(1, now - (lastSample?.time ?? now)) : 0);
+    paint(rotation.current + delta);
     current.samples.push({ time: now, angle: rotation.current });
     current.samples = current.samples.filter(s => now - s.time < 150);
   }
@@ -76,7 +73,7 @@ export function useWheelMotion(segments: string[], sound: boolean) {
       }
       const previous = rotation.current;
       const next = advance(rotation.current, speed, (now - last) / 1000);
-      last = now; speed = next.velocity; paint(next.rotation, Math.abs(speed));
+      last = now; speed = next.velocity; paint(next.rotation);
       if (speed === 0) {
         settledDeflection = pointerDeflection(next.rotation, segments.length, next.rotation - previous);
         settlingAt = now;

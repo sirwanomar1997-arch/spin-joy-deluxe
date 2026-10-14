@@ -44,6 +44,10 @@
   --gold: oklch(.85 .16 85);
   --gold-deep: oklch(.48 .12 65);
   --gold-light: oklch(.98 .075 90);
+  --rim-gold-shadow: oklch(.29 .035 66);
+  --rim-gold-mid: oklch(.69 .085 77);
+  --rim-gold-light: oklch(.97 .035 88);
+  --winner-streak-glow: 0 0 6px color-mix(in oklab, var(--gold) 65%, transparent), 0 0 18px color-mix(in oklab, var(--gold) 35%, transparent);
   --metal-dark: oklch(.1 .008 250);
   --metal-medium: oklch(.29 .025 250);
   --metal-light: oklch(.65 .025 250);
@@ -111,21 +115,24 @@
 .wheel-title { font: 500 22px/1.25 var(--font-display); overflow-wrap: anywhere; }
 .wheel-title-long { font-size: 15px; }
 .title-capsule:empty { border: none; background: none; box-shadow: none; }
-.result-space { height: 161px; flex: 0 0 161px; display: flex; justify-content: center; align-items: end; padding-bottom: 31px; width: 100%; }
+.result-space { height: 161px; flex: 0 0 161px; display: flex; justify-content: center; align-items: end; padding-bottom: 60px; width: 100%; }
 .winner-name { max-width: 95%; text-align: center; font: 600 57px/1.08 var(--font-display); color: var(--gold-light); overflow-wrap: anywhere; text-shadow: 0 0 8px color-mix(in oklab, var(--gold) 65%, transparent), 0 0 25px color-mix(in oklab, var(--gold) 30%, transparent); animation: winner-in .65s ease-out; }
 .winner-long { font-size: 28px; }
-.winner-rule { position: relative; height: 3px; width: min(88%, 280px); min-width: 90px; margin: 15px auto 0; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--gold-deep) 8%, var(--gold) 25%, var(--gold-light) 50%, var(--gold) 75%, var(--gold-deep) 92%, transparent); box-shadow: 0 1px 0 var(--gold-deep), 0 0 12px color-mix(in oklab, var(--gold) 65%, transparent); }
-.winner-rule::after { content: ''; position: absolute; width: 7px; height: 7px; top: -2px; left: calc(50% - 3.5px); transform: rotate(45deg); background: var(--gold-light); border: 1px solid var(--gold); box-shadow: 0 0 8px color-mix(in oklab, var(--gold) 60%, transparent); }
+.winner-rule { position: relative; left: 50%; transform: translateX(-50%); height: 2px; width: min(320px, calc(100% + 70px)); min-width: 160px; margin: 15px 0 0; background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--rim-gold-mid) 55%, transparent) 18%, var(--gold) 40%, var(--gold-light) 50%, var(--gold) 60%, color-mix(in oklab, var(--rim-gold-mid) 55%, transparent) 82%, transparent); box-shadow: var(--winner-streak-glow); }
+.winner-rule::before { content: ''; position: absolute; inset: -7px 12%; background: radial-gradient(ellipse, color-mix(in oklab, var(--gold) 45%, transparent), transparent 70%); pointer-events: none; }
+.winner-rule::after { content: ''; position: absolute; width: 58px; height: 5px; top: -1.5px; left: calc(50% - 29px); border-radius: 50%; background: var(--gold-light); filter: blur(2px); box-shadow: var(--winner-streak-glow); }
 .wheel-stage { position: relative; width: min(100%, 610px, calc(100svh - 275px)); aspect-ratio: 1; }
 .wheel-surface { width: 100%; height: 100%; border-radius: 50%; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; box-shadow: var(--rim-glow); transition: box-shadow 1s ease; }
-.wheel-stage::after { content: ''; position: absolute; inset: -.8%; border-radius: 50%; border: 1px solid color-mix(in oklab, var(--gold) 45%, transparent); pointer-events: none; }
 .has-winner .wheel-surface { box-shadow: var(--winner-glow); }
 .wheel-surface:active { cursor: grabbing; }
 .is-spinning .wheel-surface { cursor: wait; }
 .rotating-wheel { width: 100%; height: 100%; display: block; will-change: transform; overflow: visible; }
-.rim-outline { stroke: var(--metal-light); stroke-width: 1.3; }
-.rim-hairline { fill: none; stroke: color-mix(in oklab, var(--light) 45%, transparent); stroke-width: .65; }
-.rim-inlay { fill: none; stroke: var(--gold); stroke-width: 1.5; }
+.rim-outline { stroke: var(--metal-dark); stroke-width: 3; }
+.rim-hairline { fill: none; stroke: color-mix(in oklab, var(--rim-gold-light) 65%, transparent); stroke-width: .65; }
+.rim-inlay { fill: none; stroke-width: 1.2; }
+.rim-gold-shadow { stop-color: var(--rim-gold-shadow); }
+.rim-gold-mid { stop-color: var(--rim-gold-mid); }
+.rim-gold-light { stop-color: var(--rim-gold-light); }
 .inner-rim { fill: var(--metal-dark); }
 .segment { stroke: var(--metal-dark); stroke-width: 3; stroke-linejoin: round; }
 .segment-bevel { fill: none; stroke: color-mix(in oklab, var(--light) 26%, transparent); stroke-width: 1; }
@@ -232,6 +239,6 @@
 .reduced-effects .wheel-surface { box-shadow: 0 0 3px var(--gold); }
 .reduced-effects .app-backdrop::after { display: none; }
 @media (prefers-reduced-motion: reduce) { .winner-name,.secondary-screen,.sky-texture,.sky-star { animation: none; } .wheel-surface { transition: none; } .winner-name { text-shadow: none; } * { scroll-behavior: auto !important; } }
-@media (min-width: 768px) { .home-screen { padding-top: 45px; } .wheel-title { font-size: 30px; } .wheel-title-long { font-size: 20px; } .title-capsule { min-height: 60px; } .result-space { height: 190px; flex-basis: 190px; padding-bottom: 35px; } .winner-name { font-size: 76px; } .winner-long { font-size: 40px; } .wheel-stage { width: min(610px, calc(100svh - 350px)); } }
+@media (min-width: 768px) { .home-screen { padding-top: 45px; } .wheel-title { font-size: 30px; } .wheel-title-long { font-size: 20px; } .title-capsule { min-height: 60px; } .result-space { height: 190px; flex-basis: 190px; padding-bottom: 95px; } .winner-name { font-size: 76px; } .winner-long { font-size: 40px; } .wheel-stage { width: min(610px, calc(100svh - 350px)); } }
 @media (max-width: 480px) { .background-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } .background-choice { aspect-ratio: 5 / 4; } .segment-fields { grid-template-columns: 1fr; } .saved-wheel { padding: 16px; gap: 12px; } .saved-wheel-actions { flex-direction: column; } .screen-header { gap: 10px; } .screen-header h1 { font-size: 22px; } }
 @media (max-width: 350px) { .home-screen { padding-left: 14px; padding-right: 14px; } .home-header { gap: 8px; grid-template-columns: 40px minmax(0,1fr) 40px; } .neon-icon { width: 40px; height: 40px; } .wheel-title { font-size: 18px; } }
