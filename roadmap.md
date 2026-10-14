@@ -16,5 +16,5 @@
 - [x] Clone the project onto the Mac from the public GitHub repository.
 - [x] Generate the iOS app icon, then archive and upload to App Store Connect.
 - [x] Fill in the iOS app listing and submit it for review.
-- [pågår] Google Play: app skapad (paketnamn app.spinjoydeluxe), ikon + funktionsbild uppladdade, skärmbilder klara (telefon, 7" och 10" surfplatta), kort + fullständig beskrivning sparad. Kvar: integritetspolicy https://spin-joy-deluxe.lovable.app/privacy, data safety, åldersklassning, målgrupp, pris 20 kr, production release med app-release.aab från Dokument, skicka till granskning.
+- [pågår] Google Play: app skapad (paketnamn app.spinjoydeluxe), ikon + funktionsbild uppladdade, skärmbilder klara (telefon, 7" och 10" surfplatta), kort + fullständig beskrivning sparad, integritetspolicy inskriven. Kvar: data safety, åldersklassning, målgrupp, pris 20 kr, production release med app-release.aab från Dokument, skicka till granskning.
 - [ ] Submit both stores for review with price 20 SEK, age 13+, privacy link.
