@@ -12,4 +12,8 @@
 - [x] Replace Safir with pink, enlarge emojis, enrich audio and refine gold winner/rim details; verify together.
 - [x] Remove waterfall-like spin noise while preserving clicks and winner tones.
 - [x] Refine tapered winner light streak and reflective dark-metal/gold rim; verify real spin.
-- [x] Package the app for App Store and Google Play: icon, splash, one-command setup, store guide.- [pågår] Ladda ner projektet till Mac (git-klonning kräver GitHub-inloggning) och bygg iOS/Android-apparna
+- [x] Package the app for App Store and Google Play: icon, splash, one-command setup, store guide.
+- [x] Clone the project onto the Mac from the public GitHub repository.
+- [pågår] Generate the iOS app icon, then archive and upload to App Store Connect.
+- [ ] Build and upload the Android app bundle to Google Play.
+- [ ] Submit both stores for review with price 20 SEK, age 13+, privacy link.

@@ -10,7 +10,7 @@ node -v
 npm -v
 
 echo "==> 2/5 Installerar paket"
-if [ -f bun.lock ]; then
+if command -v bun >/dev/null 2>&1 && [ -f bun.lock ]; then
   bun install
 else
   npm install

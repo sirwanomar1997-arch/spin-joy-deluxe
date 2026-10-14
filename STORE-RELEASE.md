@@ -25,7 +25,25 @@ bash scripts/setup-app.sh
 Skriptet installerar paket, skapar iPhone- och Android-projekten, och gör
 färdiga appikoner och startskärmar av `assets/icon.png` och `assets/splash.png`.
 
+Stannar skriptet med felmeddelandet `ios platform has not been added yet`,
+kör stegen för hand i stället:
+
+```
+npm install
+npx cap add ios
+npx cap add android
+npx @capacitor/assets generate
+npx cap sync
+```
+
 ## 3. iPhone till App Store
+
+Appikonen **laddas aldrig upp separat** till App Store Connect. Den ligger i
+Xcode-projektet och följer med bygget. Därför måste den skapas innan arkiveringen:
+
+```
+npx @capacitor/assets generate --ios && npx cap sync
+```
 
 ```
 npx cap open ios
@@ -33,7 +51,8 @@ npx cap open ios
 
 1. I Xcode: välj din **Team** under *Signing & Capabilities* och ett unikt
    **Bundle Identifier**.
-2. Appikonen är redan ifylld av skriptet.
+2. Kontrollera att ikonen syns: klicka **App** till vänster → **Assets.xcassets**
+   → **AppIcon**. Rutan ska visa appens bild, inte vara tom.
 3. **Product → Archive**. När arkivet klart: **Distribute App → App Store Connect → Upload**.
 4. I **App Store Connect**:
    - Pris: **20,00 kr** (betalbar nedladdning, nivå 2).
@@ -46,6 +65,7 @@ npx cap open ios
 ## 4. Android till Google Play
 
 ```
+npx @capacitor/assets generate --android && npx cap sync
 npx cap open android
 ```
 
@@ -54,6 +74,8 @@ npx cap open android
    du aldrig uppdatera appen.
 3. I **Play Console**:
    - Ny app, betald nedladdning, pris **20,00 kr**.
+   - Här laddar du **upp** ikon (1024×1024) och funktionsbild (1024×500) under
+     **Butikslista**, tillsammans med skärmbilderna.
    - Åldersklassning: fyll i frågeformuläret (ger ca 12+/13+).
    - Datasäkerhet: **ingen data samlas in**, dela inte med tredjepart.
    - Integritetspolicy: https://spin-joy-deluxe.lovable.app/privacy
