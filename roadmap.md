@@ -16,5 +16,5 @@
 - [x] Clone the project onto the Mac from the public GitHub repository.
 - [x] Generate the iOS app icon, then archive and upload to App Store Connect.
 - [x] Fill in the iOS app listing and submit it for review.
-- [pågår] Google Play: 12 av 13 uppgifter klara (ikon, funktionsbild, skärmbilder telefon/7"/10", beskrivningar, integritetspolicy, målgrupp, datasäkerhet, annonser, myndighetsappar, finans, hälsa, kategori/kontakt, butiksuppgifter, säljarkonto, pris). Kvar: innehållsklassificering, sedan production release med app-release.aab från Dokument och skicka till granskning.
+- [pågår] Google Play: alla 13 uppgifter i App content klara (ikon, funktionsbild, skärmbilder telefon/7"/10", beskrivningar, integritetspolicy, målgrupp, datasäkerhet, annonser, innehållsklassificering, myndighetsappar, finans, hälsa, kategori/kontakt, butiksuppgifter, säljarkonto, pris). Kvar: production release med app-release.aab från Dokument, sedan skicka till granskning.
 - [ ] Submit both stores for review with price 20 SEK, age 13+, privacy link.
