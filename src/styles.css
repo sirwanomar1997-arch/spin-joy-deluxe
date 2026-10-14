@@ -106,7 +106,8 @@
 .star-clear { stop-color: var(--light); stop-opacity: 0; }
 .star-rays { fill: none; stroke: var(--light); stroke-width: .7; opacity: .8; }
 .app-backdrop::after { content: ''; position: fixed; inset: 0; z-index: -1; background: radial-gradient(ellipse at 50% 49%, color-mix(in oklab, var(--primary) 5%, transparent), transparent 66%); pointer-events: none; }
-.home-screen { min-height: 100svh; padding: max(28px, env(safe-area-inset-top)) 20px 48px; display: flex; flex-direction: column; align-items: center; }
+.home-screen { min-height: 100svh; padding: max(28px, env(safe-area-inset-top)) 20px max(48px, env(safe-area-inset-bottom)); display: flex; flex-direction: column; align-items: center; }
+.wheel-column { flex: 1 1 auto; min-height: 0; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .home-header { display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; gap: 14px; align-items: center; width: 100%; max-width: 690px; }
 .neon-icon { width: 46px; height: 46px; border-radius: 50%; border: 1px solid color-mix(in oklab, var(--metal-light) 65%, transparent); background: radial-gradient(circle at 30% 20%, var(--secondary), var(--background)); color: var(--foreground); box-shadow: 0 4px 14px color-mix(in oklab, var(--shadow) 40%, transparent), inset 0 1px 1px color-mix(in oklab, var(--light) 12%, transparent); }
 .neon-icon svg { width: 22px; height: 22px; }

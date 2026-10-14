@@ -9,7 +9,7 @@ export function Wheel({ wheel, sound, onBusy }: { wheel: WheelConfig; sound: boo
   const motion = useWheelMotion(wheel.segments, sound);
   const uid = useId().replace(/:/g, '');
   const count = wheel.segments.length;
-  return <>
+  return <div className="wheel-column">
     <div className="result-space" aria-live="polite" aria-atomic="true">
       {motion.winner !== null && <div className={`winner-name ${motion.winner.length > 16 ? 'winner-long' : ''}`}><span>{motion.winner.toLocaleUpperCase('sv-SE')}</span><div className="winner-rule" /></div>}
     </div>
@@ -62,7 +62,7 @@ export function Wheel({ wheel, sound, onBusy }: { wheel: WheelConfig; sound: boo
       <svg className="gold-pointer" viewBox="0 0 64 96" aria-hidden="true"><defs><linearGradient id={`${uid}-gold`} x1="0" y1=".4" x2="1" y2=".6"><stop className="gold-deep" offset="0"/><stop className="gold-bright" offset=".18"/><stop className="gold-light" offset=".35"/><stop className="gold-bright" offset=".65"/><stop className="gold-deep" offset="1"/></linearGradient></defs><circle cx="32" cy="18" r="24" fill={`url(#${uid}-hub)`} className="pointer-mount" /><g ref={motion.pointerRef} className="pointer-flapper"><path d="M32 92 C27 78 6 40 6 28 C6 -4 58 -4 58 28 C58 40 37 78 32 92Z" fill={`url(#${uid}-gold)`} className="pointer-edge"/><path d="M29 82 C23 63 11 37 11 27 C11 14 20 8 29 7" className="pointer-shine" /></g><circle cx="32" cy="18" r="7" fill={`url(#${uid}-peg)`} className="pointer-pivot" /><path d="M29 18 H35" className="axle-slot" /></svg>
     </div>
     <BusySignal spinning={motion.spinning} onBusy={onBusy} />
-  </>;
+  </div>;
 }
 import { useEffect } from 'react';
 function BusySignal({ spinning, onBusy }: { spinning: boolean; onBusy: (busy: boolean) => void }) {
