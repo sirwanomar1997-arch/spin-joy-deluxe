@@ -1,6 +1,6 @@
 export type Sample = { time: number; angle: number };
-export const FRICTION = 0.72;
-export const STOP_SPEED = 4;
+export const FRICTION = 0.4;
+export const STOP_SPEED = 0.7;
 export function releaseVelocity(samples: Sample[], now: number) {
   const recent = samples.filter(s => now - s.time <= 120);
   const last = recent.at(-1);

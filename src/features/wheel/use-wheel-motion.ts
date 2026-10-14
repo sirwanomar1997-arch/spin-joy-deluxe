@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react';
-import { angleDelta, normalize, winnerIndex } from './geometry';
-import { advance, releaseVelocity, type Sample } from './physics';
+import { angleDelta, pointerDeflection, winnerIndex } from './geometry';
+import { advance, releaseVelocity, STOP_SPEED, type Sample } from './physics';
 import { WheelAudio } from './audio';
 export function useWheelMotion(segments: string[], sound: boolean) {
   const svgRef = useRef<SVGSVGElement>(null);
+  const pointerRef = useRef<SVGGElement>(null);
   const rotation = useRef(0);
   const frame = useRef(0);
   const busy = useRef(false);
@@ -17,13 +18,15 @@ export function useWheelMotion(segments: string[], sound: boolean) {
     const previous = rotation.current;
     rotation.current = angle;
     if (svgRef.current) { svgRef.current.style.transform = `rotate(${angle}deg)`; svgRef.current.dataset['rotation'] = String(angle); }
+    pointerRef.current?.setAttribute('transform', `rotate(${pointerDeflection(angle, segments.length, angle - previous)} 32 18)`);
     if (sound && speed > 0) audio.current?.updateSpin(speed);
     if (sound && Math.floor(previous / (360 / segments.length)) !== Math.floor(angle / (360 / segments.length)) && performance.now() - lastTick.current > 45) { audio.current?.tick(); lastTick.current = performance.now(); }
   }
   function finish() {
     busy.current = false; setSpinning(false);
     audio.current?.stopSpin();
-    paint(normalize(rotation.current));
+    // Keep the exact final angle: no rebase, snapping or extra turn at rest.
+    pointerRef.current?.setAttribute('transform', 'rotate(0 32 18)');
     setWinner(segments[winnerIndex(rotation.current, segments.length)]?.trim() || 'TOMT SEGMENT');
     if (sound) audio.current?.finish();
   }
@@ -59,7 +62,7 @@ export function useWheelMotion(segments: string[], sound: boolean) {
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
     if (current.moved <= 2) return;
     const velocity = cancelled ? 0 : releaseVelocity(current.samples, performance.now());
-    if (Math.abs(velocity) <= 4) { finish(); return; }
+    if (Math.abs(velocity) <= STOP_SPEED) { finish(); return; }
     busy.current = true; setSpinning(true);
     let speed = velocity, last = performance.now();
     function step(now: number) {
@@ -69,5 +72,5 @@ export function useWheelMotion(segments: string[], sound: boolean) {
     }
     frame.current = requestAnimationFrame(step);
   }
-  return { svgRef, spinning, winner, handlers: { onPointerDown, onPointerMove, onPointerUp: (e: PointerEvent<HTMLDivElement>) => release(e), onPointerCancel: (e: PointerEvent<HTMLDivElement>) => release(e, true), onLostPointerCapture: (e: PointerEvent<HTMLDivElement>) => { if (drag.current) release(e, true); } } };
+  return { svgRef, pointerRef, spinning, winner, handlers: { onPointerDown, onPointerMove, onPointerUp: (e: PointerEvent<HTMLDivElement>) => release(e), onPointerCancel: (e: PointerEvent<HTMLDivElement>) => release(e, true), onLostPointerCapture: (e: PointerEvent<HTMLDivElement>) => { if (drag.current) release(e, true); } } };
 }

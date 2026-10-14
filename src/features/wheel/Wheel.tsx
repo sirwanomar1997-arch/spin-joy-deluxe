@@ -41,15 +41,21 @@ export function Wheel({ wheel, sound, onBusy }: { wheel: WheelConfig; sound: boo
           })}
           <circle cx="300" cy="300" r="280" className="segment-inner-edge" />
           <circle cx="300" cy="300" r="277" className="face-hairline" />
+          {wheel.segments.map((_, i) => {
+            const pos = point(-90 + i * 360 / count, 287);
+            return <g key={`peg-${i}`} className="rim-pin"><ellipse cx={pos.x} cy={pos.y + 2.5} rx="5.2" ry="5.8" className="pin-shadow" /><circle cx={pos.x} cy={pos.y} r="4.7" fill={`url(#${uid}-peg)`} className="peg" /><circle cx={pos.x - 1.2} cy={pos.y - 1.5} r="1.25" className="peg-highlight" /></g>;
+          })}
           <circle cx="300" cy="304" r="76" className="hub-shadow" />
           <circle cx="300" cy="300" r="73" fill={`url(#${uid}-rim)`} className="hub-edge" />
           <circle cx="300" cy="300" r="70" className="hub-inlay" />
           <circle cx="300" cy="300" r="68" fill={`url(#${uid}-hub)`} />
           <circle cx="300" cy="300" r="64" className="hub-hairline" />
           <path d="M257 275 A50 50 0 0 1 328 258" className="hub-reflection" />
+          <circle cx="300" cy="300" r="8" fill={`url(#${uid}-peg)`} className="hub-axle" />
+          <path d="M296 300 H304" className="axle-slot" />
         </svg>
       </div>
-      <svg className="gold-pointer" viewBox="0 0 64 96" aria-hidden="true"><defs><linearGradient id={`${uid}-gold`} x1="0" y1=".4" x2="1" y2=".6"><stop className="gold-deep" offset="0"/><stop className="gold-bright" offset=".18"/><stop className="gold-light" offset=".35"/><stop className="gold-bright" offset=".65"/><stop className="gold-deep" offset="1"/></linearGradient></defs><path d="M32 92 C27 78 6 40 6 28 C6 -4 58 -4 58 28 C58 40 37 78 32 92Z" fill={`url(#${uid}-gold)`} className="pointer-edge"/><path d="M29 82 C23 63 11 37 11 27 C11 14 20 8 29 7" className="pointer-shine" /></svg>
+      <svg className="gold-pointer" viewBox="0 0 64 96" aria-hidden="true"><defs><linearGradient id={`${uid}-gold`} x1="0" y1=".4" x2="1" y2=".6"><stop className="gold-deep" offset="0"/><stop className="gold-bright" offset=".18"/><stop className="gold-light" offset=".35"/><stop className="gold-bright" offset=".65"/><stop className="gold-deep" offset="1"/></linearGradient></defs><circle cx="32" cy="18" r="24" fill={`url(#${uid}-hub)`} className="pointer-mount" /><g ref={motion.pointerRef} className="pointer-flapper"><path d="M32 92 C27 78 6 40 6 28 C6 -4 58 -4 58 28 C58 40 37 78 32 92Z" fill={`url(#${uid}-gold)`} className="pointer-edge"/><path d="M29 82 C23 63 11 37 11 27 C11 14 20 8 29 7" className="pointer-shine" /></g><circle cx="32" cy="18" r="7" fill={`url(#${uid}-peg)`} className="pointer-pivot" /><path d="M29 18 H35" className="axle-slot" /></svg>
     </div>
     <BusySignal spinning={motion.spinning} onBusy={onBusy} />
   </>;
