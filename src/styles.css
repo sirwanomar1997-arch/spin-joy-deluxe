@@ -115,7 +115,7 @@
 .title-capsule { min-height: 51px; width: 100%; padding: 8px 12px; border-radius: 999px; border: 1px solid transparent; background: linear-gradient(125deg, var(--secondary), var(--background)) padding-box, linear-gradient(120deg, var(--metal-light), var(--metal-medium), var(--metal-light)) border-box; box-shadow: 0 5px 18px color-mix(in oklab, var(--shadow) 40%, transparent); text-align: center; }
 .wheel-title { font: 500 22px/1.25 var(--font-display); overflow-wrap: anywhere; }
 .wheel-title-long { font-size: 15px; }
-.title-capsule:empty { border: none; background: none; box-shadow: none; }
+.wheel-title-empty { color: color-mix(in oklab, var(--foreground) 42%, transparent); letter-spacing: .06em; }
 .result-space { grid-row: 1; align-self: end; height: 161px; flex: 0 0 161px; display: flex; justify-content: center; align-items: end; padding-bottom: 60px; width: 100%; }
 .winner-name { max-width: 95%; text-align: center; font: 600 57px/1.08 var(--font-display); color: var(--gold-light); overflow-wrap: anywhere; text-shadow: 0 0 8px color-mix(in oklab, var(--gold) 65%, transparent), 0 0 25px color-mix(in oklab, var(--gold) 30%, transparent); animation: winner-in .65s ease-out; }
 .winner-long { font-size: 28px; }
