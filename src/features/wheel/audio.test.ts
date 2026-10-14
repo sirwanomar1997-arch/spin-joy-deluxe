@@ -30,7 +30,7 @@ describe('wheel audio', () => {
     audio.unlock(); audio.tick(); audio.finish();
     expect(sources).toHaveLength(1); // Only the silent mobile unlock, never a noise loop.
     expect(sources.every(source => !source.loop)).toBe(true);
-    expect(frequencies.slice(0, 2)).toEqual([520, 1560]);
+    expect(frequencies.slice(0, 2)).toEqual([420, 1260]);
     expect(oscillatorTypes.slice(0, 2)).toEqual(['triangle', 'sine']);
     expect(peaks.slice(0, 4)).toEqual([.28, .0001, .085, .0001]);
     expect(frequencies.slice(2)).toEqual([523.25, 1046.5, 659.25, 1318.5, 783.99, 1567.98, 1046.5, 2093, 261.63, 392]);
