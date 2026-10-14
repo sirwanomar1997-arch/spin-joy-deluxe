@@ -1,0 +1,11 @@
+{
+  "appId": "app.spinjoydeluxe",
+  "appName": "Spin the Wheel Deluxe",
+  "webDir": "public",
+  "server": {
+    "url": "https://spin-joy-deluxe.lovable.app",
+    "cleartext": false
+  },
+  "ios": { "contentInset": "never" },
+  "android": { "allowMixedContent": false }
+}
