@@ -8,12 +8,12 @@ export function WheelProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState('');
   useEffect(() => {
     try { const saved = localStorage.getItem(STORAGE_KEY); if (saved) setStore(validateStore(JSON.parse(saved))); }
-    catch { setError('Dina sparade hjul kunde inte läsas. De har inte skrivits över.'); }
+    catch { setError('read'); }
     setReady(true);
   }, []);
   function commit(next: Store) {
     try { writeStore(next); setStore(next); setError(''); return true; }
-    catch { setError('Det gick inte att spara på enheten. Kontrollera att webbläsarlagring är tillåten och försök igen.'); return false; }
+    catch { setError('write'); return false; }
   }
   return <Context.Provider value={{ store, ready, error, commit, clearError: () => setError('') }}>{children}</Context.Provider>;
 }
