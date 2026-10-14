@@ -18,7 +18,7 @@ function Index() {
   const t = useT();
   return <div className={store.settings.reducedMotion ? 'reduced-effects' : ''}><Backdrop><main className="home-screen"><header className="home-header">
     <Button variant="neonWarm" size="deluxeIcon" aria-label={t.settings} disabled={busy || !ready} asChild={!busy && ready}>{busy || !ready ? <Settings2 /> : <Link to="/settings" aria-label={t.settings} title={t.settings}><Settings2 /></Link>}</Button>
-    <div className="title-capsule">{wheel.title && <h1 className={`wheel-title ${wheel.title.length > 22 ? 'wheel-title-long' : ''}`}>{wheel.title}</h1>}</div>
+    <div className="title-capsule">{wheel.title ? <h1 className={`wheel-title ${wheel.title.length > 22 ? 'wheel-title-long' : ''}`}>{wheel.title}</h1> : <span className="wheel-title wheel-title-empty">{t.titlePlaceholder}</span>}</div>
     <Button variant="neon" size="deluxeIcon" aria-label={t.editWheel} disabled={busy || !ready} asChild={!busy && ready}>{busy || !ready ? <Pencil /> : <Link to="/edit" aria-label={t.editWheel} title={t.editWheel}><Pencil /></Link>}</Button>
   </header><StorageError />{ready && <Wheel key={`${wheel.id}-${JSON.stringify(wheel.segments)}`} wheel={wheel} sound={store.settings.sound} onBusy={setBusy} />}</main></Backdrop></div>;
 }
