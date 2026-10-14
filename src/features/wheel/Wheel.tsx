@@ -3,6 +3,7 @@
 import { useId } from 'react';
 import { point, segmentPath } from './geometry';
 import { useWheelMotion } from './use-wheel-motion';
+import { labelMetrics } from './labels';
 import type { Wheel as WheelConfig } from './storage';
 export function Wheel({ wheel, sound, onBusy }: { wheel: WheelConfig; sound: boolean; onBusy: (busy: boolean) => void }) {
   const motion = useWheelMotion(wheel.segments, sound);
@@ -17,6 +18,7 @@ export function Wheel({ wheel, sound, onBusy }: { wheel: WheelConfig; sound: boo
         <svg ref={motion.svgRef} className="rotating-wheel" viewBox="0 0 600 600" role="img" aria-label={`${count} lika stora segment`} data-rotation="0">
           <defs>
             <linearGradient id={`${uid}-rim`} x1="0" y1="0" x2="1" y2="1"><stop className="metal-medium" offset="0" /><stop className="metal-light" offset=".18" /><stop className="metal-dark" offset=".36" /><stop className="metal-medium" offset=".65" /><stop className="metal-light" offset=".82" /><stop className="metal-dark" offset="1" /></linearGradient>
+            <linearGradient id={`${uid}-rim-gold`} x1="0" y1="0" x2="1" y2="1"><stop className="gold-deep" offset="0" /><stop className="gold-light" offset=".18" /><stop className="gold-bright" offset=".32" /><stop className="gold-deep" offset=".5" /><stop className="gold-light" offset=".73" /><stop className="gold-bright" offset=".86" /><stop className="gold-deep" offset="1" /></linearGradient>
             {Array.from({ length: 7 }, (_, i) => <radialGradient key={i} id={`${uid}-enamel-${i}`} cx=".38" cy=".28" r=".8"><stop className={`enamel-light segment-${i}`} offset="0" /><stop className={`enamel-base segment-${i}`} offset=".55" /><stop className={`enamel-deep segment-${i}`} offset="1" /></radialGradient>)}
             <radialGradient id={`${uid}-glass`} cx=".35" cy=".2" r=".9"><stop className="glass-highlight" offset="0" /><stop className="glass-clear" offset=".4" /><stop className="glass-shadow" offset="1" /></radialGradient>
             <linearGradient id={`${uid}-hub`} x1="0" y1="0" x2="1" y2="1"><stop className="metal-medium" offset="0" /><stop className="metal-dark" offset=".4" /><stop className="metal-medium" offset=".51" /><stop className="metal-dark" offset=".7" /><stop className="metal-medium" offset="1" /></linearGradient>
@@ -24,6 +26,7 @@ export function Wheel({ wheel, sound, onBusy }: { wheel: WheelConfig; sound: boo
             {wheel.segments.map((_, i) => <clipPath id={`${uid}-clip-${i}`} key={i}><path d={segmentPath(i, count)} /></clipPath>)}
           </defs>
           <circle cx="300" cy="300" r="293" fill={`url(#${uid}-rim)`} className="rim-outline" />
+          <circle cx="300" cy="300" r="292" fill="none" stroke={`url(#${uid}-rim-gold)`} strokeWidth="5" />
           <circle cx="300" cy="300" r="290" className="rim-hairline" />
           <circle cx="300" cy="300" r="284" className="rim-inlay" />
           <circle cx="300" cy="300" r="282" className="inner-rim" />
@@ -31,14 +34,13 @@ export function Wheel({ wheel, sound, onBusy }: { wheel: WheelConfig; sound: boo
             const middle = -90 + (i + .5) * 360 / count;
             const pos = point(middle, 187);
             const left = middle > 90 && middle < 270;
-            const text = label.toLocaleUpperCase('sv-SE');
-            const fontSize = Math.min(count > 16 ? 23 : count > 12 ? 28 : 34, 158 / Math.max(text.length * .66, 1), count === 1 ? 34 : 2 * 108 * Math.sin(Math.PI / count) * .8);
+            const { glyphs, fontSize, emojiSize } = labelMetrics(label, count);
             const color = i === count - 1 && i % 7 === 0 ? 3 : i % 7;
             return <g key={i}>
               <path d={segmentPath(i, count)} className="segment" fill={`url(#${uid}-enamel-${color})`} />
               <path d={segmentPath(i, count)} fill={`url(#${uid}-glass)`} className="segment-reflection" />
               <path d={segmentPath(i, count)} className="segment-bevel" />
-              <g clipPath={`url(#${uid}-clip-${i})`}><text x={pos.x} y={pos.y} fontSize={fontSize} transform={`rotate(${middle + (left ? 180 : 0)} ${pos.x} ${pos.y})`} textAnchor="middle" dominantBaseline="central" className="segment-label">{text}</text></g>
+              <g clipPath={`url(#${uid}-clip-${i})`}><text x={pos.x} y={pos.y} fontSize={fontSize} transform={`rotate(${middle + (left ? 180 : 0)} ${pos.x} ${pos.y})`} textAnchor="middle" dominantBaseline="central" className="segment-label">{glyphs.map((glyph, j) => <tspan key={j} className={glyph.emoji ? 'segment-emoji' : undefined} fontSize={glyph.emoji ? emojiSize : undefined}>{glyph.text}</tspan>)}</text></g>
             </g>;
           })}
           <circle cx="300" cy="300" r="280" className="segment-inner-edge" />

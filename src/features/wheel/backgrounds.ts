@@ -8,6 +8,6 @@ export const backgrounds = [
   { id: 'satin', name: 'Onyx', image: starSky.url },
   { id: 'mist', name: 'Silver', image: starSky.url },
   { id: 'nebula', name: 'Rubin', image: starSky.url },
-  { id: 'depths', name: 'Safir', image: starSky.url },
+  { id: 'depths', name: 'Rosenkvarts', image: starSky.url },
 ] as const;
 export type BackgroundId = typeof backgrounds[number]['id'];

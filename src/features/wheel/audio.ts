@@ -4,7 +4,15 @@ export class WheelAudio {
   private spinGain: GainNode | null = null;
   private spinFilter: BiquadFilterNode | null = null;
   unlock() {
-    try { this.context ??= new AudioContext(); void this.context.resume().catch(() => {}); } catch { /* Audio is optional. */ }
+    try {
+      this.context ??= new AudioContext();
+      void this.context.resume().catch(() => {});
+      // Prime mobile audio hardware inside the pointer gesture, without audible autoplay.
+      const source = this.context.createBufferSource();
+      source.buffer = this.context.createBuffer(1, 1, this.context.sampleRate);
+      source.connect(this.context.destination); source.start();
+      source.onended = () => source.disconnect();
+    } catch { /* Audio is optional. */ }
   }
   tone(frequency: number, duration: number, gain: number, offset = 0) {
     const ctx = this.context;
@@ -20,7 +28,8 @@ export class WheelAudio {
   }
   updateSpin(speed: number) {
     const ctx = this.context;
-    if (!ctx || ctx.state !== 'running' || speed < 4) return;
+    if (!ctx || ctx.state !== 'running') return;
+    if (speed < .7) { this.spinGain?.gain.setTargetAtTime(.0001, ctx.currentTime, .05); return; }
     if (!this.spinSource) {
       const buffer = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
       const data = buffer.getChannelData(0);
@@ -33,21 +42,21 @@ export class WheelAudio {
     }
     const intensity = Math.min(speed / 1500, 1);
     this.spinFilter?.frequency.setTargetAtTime(160 + intensity * 900, ctx.currentTime, .08);
-    this.spinGain?.gain.setTargetAtTime(.004 + intensity * .032, ctx.currentTime, .08);
+    this.spinGain?.gain.setTargetAtTime(.003 * Math.min(speed / 20, 1) + intensity * .07, ctx.currentTime, .08);
   }
   stopSpin() {
     this.spinSource?.stop(); this.spinSource?.disconnect(); this.spinGain?.disconnect(); this.spinFilter?.disconnect();
     this.spinSource = null; this.spinGain = null; this.spinFilter = null;
   }
-  tick() { this.tone(420, .045, .07); this.tone(1260, .025, .025); }
+  tick() { this.tone(520, .055, .12); this.tone(1560, .03, .035); }
   finish() {
     this.stopSpin();
     // A soft ascending bell phrase, with restrained harmonics and a warm final chord.
     [523.25, 659.25, 783.99, 1046.5].forEach((note, i) => {
-      this.tone(note, .9, .065, i * .12);
-      this.tone(note * 2, .55, .014, i * .12);
+      this.tone(note, .9, .11, i * .14);
+      this.tone(note * 2, .55, .022, i * .14);
     });
-    this.tone(261.63, 1.2, .045, .36); this.tone(392, 1.1, .025, .36);
+    this.tone(261.63, 1.2, .065, .42); this.tone(392, 1.1, .035, .42);
   }
   close() { this.stopSpin(); void this.context?.close().catch(() => {}); this.context = null; }
 }
