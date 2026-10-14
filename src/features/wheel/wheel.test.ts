@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { normalize, angleDelta, winnerIndex, segmentPath, pointerDeflection } from './geometry';
 import { advance, releaseVelocity, FRICTION, STOP_SPEED } from './physics';
-import { initialStore, validateStore, writeStore, STORAGE_KEY } from './storage';
+import { initialStore, newWheel, validateStore, writeStore, STORAGE_KEY } from './storage';
 import { labelMetrics } from './labels';
 describe('emoji labels', () => {
   it('keeps joined emojis intact and makes them larger than surrounding text', () => { const m=labelMetrics('Alma 👨‍👩‍👧‍👦',12); expect(m.glyphs.filter(g=>g.emoji).map(g=>g.text)).toEqual(['👨‍👩‍👧‍👦']); expect(m.emojiSize).toBeGreaterThan(m.fontSize); });
@@ -24,6 +24,19 @@ describe('wheel physics', () => {
   it('fast release travels farther than slow release', () => { expect(advance(0,1200,20).rotation).toBeGreaterThan(advance(0,200,20).rotation*5); });
 });
 describe('local wheel store', () => {
+  it('starts a first installation with an empty title', () => { expect(initialStore().wheels[0]?.title).toBe(''); });
+  it('starts a first installation with exactly 14 empty fields', () => { expect(initialStore().wheels[0]?.segments).toEqual(Array(14).fill('')); });
+  it('creates additional blank wheels with 14 empty fields', () => { const w = newWheel(); expect(w.title).toBe(''); expect(w.segments).toEqual(Array(14).fill('')); });
+  it('replaces only the untouched shipped sample on upgrade', () => {
+    const s = initialStore();
+    const sample = { id: 'deluxe-original', title: 'WHOOO PAYS?!', segments: ['Rayan', 'Alma', 'Noah', 'Leila', 'Adam', 'Maya', 'Leo', 'Sara', 'Elias', 'Nora', 'Omar', 'Ella'] };
+    s.wheels = [sample];
+    expect(validateStore(s).wheels[0]).toEqual(initialStore().wheels[0]);
+    const edited = { ...sample, title: 'My own wheel' };
+    expect(validateStore({ ...s, wheels: [edited] }).wheels[0]).toEqual(edited);
+    const editedLabels = { ...sample, segments: ['My choice', ...sample.segments.slice(1)] };
+    expect(validateStore({ ...s, wheels: [editedLabels] }).wheels[0]).toEqual(editedLabels);
+  });
   it('migrates old settings while preserving sound and wheels', () => { const s=initialStore(); const { background, ...oldSettings } = s.settings; expect(background).toBe('night'); const migrated=validateStore({...s, settings:{...oldSettings,sound:false}}); expect(migrated.settings.background).toBe('night'); expect(migrated.settings.sound).toBe(false); expect(migrated.wheels).toEqual(s.wheels); });
   it('persists all eight backgrounds and rejects unknown choices', () => { const s=initialStore(); for (const background of ['night','aurora','ocean','forest','satin','mist','nebula','depths']) expect(validateStore({...s, settings:{...s.settings,background}}).settings.background).toBe(background); expect(()=>validateStore({...s,settings:{...s.settings,background:'unknown'}})).toThrow('Ogiltig bakgrund'); });
   it('preserves order, empty text and several wheels', () => { const s=initialStore(); s.wheels.push({id:'test',title:'',segments:['','A','']}); s.activeId='test'; expect(validateStore(JSON.parse(JSON.stringify(s)))).toEqual(s); });

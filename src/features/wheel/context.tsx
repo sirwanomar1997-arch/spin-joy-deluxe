@@ -7,7 +7,15 @@ export function WheelProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const [error, setError] = useState('');
   useEffect(() => {
-    try { const saved = localStorage.getItem(STORAGE_KEY); if (saved) setStore(validateStore(JSON.parse(saved))); }
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        const validated = validateStore(parsed);
+        if (JSON.stringify(parsed) !== JSON.stringify(validated)) writeStore(validated);
+        setStore(validated);
+      }
+    }
     catch { setError('read'); }
     setReady(true);
   }, []);
@@ -22,3 +30,7 @@ export function useWheels() {
   if (!state) throw new Error('WheelProvider missing');
   return state;
 }
+
+// This module exports both the provider and its consumers. Reload them together
+// so hot updates cannot leave a mounted provider using an obsolete context.
+if (import.meta.hot) import.meta.hot.accept(() => window.location.reload());

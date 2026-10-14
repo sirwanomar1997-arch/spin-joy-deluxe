@@ -1,4 +1,8 @@
 # Spin the Wheel Deluxe
+- [x] Fix first launch to an empty title and 14 empty segments; preserve user-created wheels (23 wheel/audio tests passed).
+- [x] Fix iOS safe-area spacing; verify simulated phone safe area, first-launch editing, save/reload and settings.
+- [x] Check native update path: repository Capacitor config loads the published website, so these web-only changes may not require a new native upload.
+- [ ] Publish the correction, then confirm it in the user's installed TestFlight app; waiting on publishing and an actual-device check.
 - [x] Build premium dynamic wheel and signed drag/inertia physics.
 - [x] Build editing, settings and persistent local wheel library.
 - [x] Verify geometry, storage and full interaction on mobile and desktop.
