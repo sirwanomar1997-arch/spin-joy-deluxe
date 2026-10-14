@@ -91,10 +91,15 @@
 .star-sky::after { content: ''; position: absolute; inset: 0; background: linear-gradient(color-mix(in oklab, var(--shadow) 12%, transparent), color-mix(in oklab, var(--shadow) 28%, transparent)); }
 .sky-texture { position: absolute; inset: 0; height: 100%; width: 100%; object-fit: cover; opacity: .8; filter: var(--sky-filter); mix-blend-mode: luminosity; pointer-events: none; animation: sky-breathe 28s ease-in-out infinite alternate; }
 .living-stars { position: absolute; inset: 0; width: 100%; height: 100%; }
-.living-stars circle { fill: var(--light); opacity: .28; animation: star-twinkle 7s ease-in-out infinite alternate; }
-.living-stars circle:nth-child(3n) { animation-delay: -4s; animation-duration: 9s; }
-.living-stars circle:nth-child(3n + 1) { animation-delay: -2s; animation-duration: 11s; }
-.living-stars circle:nth-child(5n) { animation-delay: -6s; }
+.sky-star { opacity: .4; animation: star-twinkle 8s ease-in-out infinite; }
+.sky-star:nth-of-type(3n) { animation-delay: -4.7s; animation-duration: 7.3s; }
+.sky-star:nth-of-type(3n + 1) { animation-delay: -2.3s; animation-duration: 11.1s; }
+.sky-star:nth-of-type(5n) { animation-delay: -6.1s; animation-duration: 9.7s; }
+.star-point { fill: var(--light); }
+.star-core { stop-color: var(--light); stop-opacity: .8; }
+.star-soft { stop-color: var(--primary); stop-opacity: .25; }
+.star-clear { stop-color: var(--light); stop-opacity: 0; }
+.star-rays { fill: none; stroke: var(--light); stroke-width: .45; opacity: .55; }
 .app-backdrop::after { content: ''; position: fixed; inset: 0; z-index: -1; background: radial-gradient(ellipse at 50% 49%, color-mix(in oklab, var(--primary) 5%, transparent), transparent 66%); pointer-events: none; }
 .home-screen { min-height: 100svh; padding: max(28px, env(safe-area-inset-top)) 20px 48px; display: flex; flex-direction: column; align-items: center; }
 .home-header { display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; gap: 14px; align-items: center; width: 100%; max-width: 690px; }
@@ -116,14 +121,14 @@
 .wheel-surface:active { cursor: grabbing; }
 .is-spinning .wheel-surface { cursor: wait; }
 .rotating-wheel { width: 100%; height: 100%; display: block; will-change: transform; overflow: visible; }
-.rim-outline { stroke: var(--metal-light); stroke-width: 1; }
+.rim-outline { stroke: var(--metal-light); stroke-width: 1.3; }
 .rim-hairline { fill: none; stroke: color-mix(in oklab, var(--light) 45%, transparent); stroke-width: .65; }
 .rim-inlay { fill: none; stroke: color-mix(in oklab, var(--gold) 50%, var(--metal-medium)); stroke-width: 1; }
 .inner-rim { fill: var(--metal-dark); }
 .segment { stroke: var(--metal-dark); stroke-width: 3; stroke-linejoin: round; }
 .segment-bevel { fill: none; stroke: color-mix(in oklab, var(--light) 26%, transparent); stroke-width: 1; }
 .face-hairline { fill: none; stroke: color-mix(in oklab, var(--shadow) 40%, transparent); stroke-width: 2; }
-.enamel-light { stop-color: color-mix(in oklab, var(--segment-color) 78%, var(--light)); }
+.enamel-light { stop-color: color-mix(in oklab, var(--segment-color) 72%, var(--light)); }
 .enamel-base { stop-color: var(--segment-color); }
 .enamel-deep { stop-color: color-mix(in oklab, var(--segment-color) 83%, var(--shadow)); }
 .segment-0 { --segment-color: var(--segment-0); fill: var(--segment-0); }
@@ -139,17 +144,22 @@
 .metal-dark { stop-color: var(--metal-dark); }
 .metal-medium { stop-color: var(--metal-medium); }
 .metal-light { stop-color: var(--metal-light); }
-.glass-highlight { stop-color: var(--light); stop-opacity: .18; }
+.glass-highlight { stop-color: var(--light); stop-opacity: .26; }
 .glass-clear { stop-color: var(--light); stop-opacity: 0; }
 .glass-shadow { stop-color: var(--shadow); stop-opacity: .13; }
 .peg { stroke: var(--metal-dark); stroke-width: 1; }
+.pin-shadow { fill: var(--shadow); opacity: .65; }
 .peg-highlight { fill: var(--light); opacity: .72; }
+.hub-axle { stroke: var(--metal-dark); stroke-width: 1.5; }
+.axle-slot { stroke: var(--metal-dark); stroke-width: 1.5; stroke-linecap: round; }
+.pointer-mount { stroke: var(--metal-light); stroke-width: 1.5; }
+.pointer-pivot { stroke: var(--gold-deep); stroke-width: 1; }
 .hub-shadow { fill: var(--shadow); opacity: .7; }
 .hub-edge { stroke: var(--metal-dark); stroke-width: 4; }
 .hub-inlay { fill: none; stroke: color-mix(in oklab, var(--gold) 45%, var(--metal-medium)); stroke-width: .8; }
 .hub-hairline { fill: none; stroke: var(--metal-light); stroke-width: .6; opacity: .55; }
 .hub-reflection { fill: none; stroke: var(--metal-light); stroke-width: 1.2; stroke-linecap: round; opacity: .65; }
-.gold-pointer { position: absolute; z-index: 2; width: 9.8%; height: auto; top: -6.2%; left: 45.1%; filter: drop-shadow(0 3px 3px var(--shadow)) drop-shadow(0 0 5px color-mix(in oklab, var(--gold) 40%, transparent)); pointer-events: none; }
+.gold-pointer { position: absolute; z-index: 2; width: 9.8%; height: auto; top: -12.85%; left: 45.1%; overflow: visible; filter: drop-shadow(0 3px 3px var(--shadow)) drop-shadow(0 0 5px color-mix(in oklab, var(--gold) 40%, transparent)); pointer-events: none; }
 .gold-deep { stop-color: var(--gold-deep); }
 .gold-bright { stop-color: var(--gold); }
 .gold-light { stop-color: var(--gold-light); }
@@ -210,14 +220,14 @@
 @keyframes winner-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes screen-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes sky-breathe { from { transform: scale(1); } to { transform: scale(1.025); } }
-@keyframes star-twinkle { 0%, 15% { opacity: .16; } 70%, 100% { opacity: .65; } }
-.reduced-effects .living-stars circle { animation: none; opacity: .25; }
+@keyframes star-twinkle { 0%, 100% { opacity: .27; } 28% { opacity: .48; } 44% { opacity: .38; } 62% { opacity: .86; } 76% { opacity: .54; } }
+.reduced-effects .sky-star { animation: none; opacity: .4; }
 .reduced-effects .sky-texture { animation: none; }
 .reduced-effects .wheel-surface { transition: none; }
 .reduced-effects .winner-name { animation: none; text-shadow: none; }
 .reduced-effects .wheel-surface { box-shadow: 0 0 3px var(--gold); }
 .reduced-effects .app-backdrop::after { display: none; }
-@media (prefers-reduced-motion: reduce) { .winner-name,.secondary-screen,.sky-texture,.living-stars circle { animation: none; } .wheel-surface { transition: none; } .winner-name { text-shadow: none; } * { scroll-behavior: auto !important; } }
+@media (prefers-reduced-motion: reduce) { .winner-name,.secondary-screen,.sky-texture,.sky-star { animation: none; } .wheel-surface { transition: none; } .winner-name { text-shadow: none; } * { scroll-behavior: auto !important; } }
 @media (min-width: 768px) { .home-screen { padding-top: 45px; } .wheel-title { font-size: 30px; } .wheel-title-long { font-size: 20px; } .title-capsule { min-height: 60px; } .result-space { height: 190px; flex-basis: 190px; padding-bottom: 35px; } .winner-name { font-size: 76px; } .winner-long { font-size: 40px; } .wheel-stage { width: min(610px, calc(100svh - 350px)); } }
 @media (max-width: 480px) { .background-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } .background-choice { aspect-ratio: 5 / 4; } .segment-fields { grid-template-columns: 1fr; } .saved-wheel { padding: 16px; gap: 12px; } .saved-wheel-actions { flex-direction: column; } .screen-header { gap: 10px; } .screen-header h1 { font-size: 22px; } }
 @media (max-width: 350px) { .home-screen { padding-left: 14px; padding-right: 14px; } .home-header { gap: 8px; grid-template-columns: 40px minmax(0,1fr) 40px; } .neon-icon { width: 40px; height: 40px; } .wheel-title { font-size: 18px; } }

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { normalize, angleDelta, winnerIndex, segmentPath } from './geometry';
-import { advance, releaseVelocity, FRICTION } from './physics';
+import { normalize, angleDelta, winnerIndex, segmentPath, pointerDeflection } from './geometry';
+import { advance, releaseVelocity, FRICTION, STOP_SPEED } from './physics';
 import { initialStore, validateStore, writeStore, STORAGE_KEY } from './storage';
 describe('wheel geometry', () => {
   it('normalizes signed rotations and many revolutions', () => { expect(normalize(-721)).toBe(359); expect(normalize(1081)).toBe(1); });
@@ -9,11 +9,13 @@ describe('wheel geometry', () => {
     for(let n=1;n<=24;n++) for(let i=0;i<n;i++) for(const turns of [-30,0,40]) expect(winnerIndex(-(i+.5)*360/n+turns*360,n)).toBe(i);
   });
   it('has consistent boundaries and single segment', () => { expect(winnerIndex(0,12)).toBe(0); expect(winnerIndex(-30,12)).toBe(1); expect(winnerIndex(30,12)).toBe(11); expect(winnerIndex(-999,1)).toBe(0); expect(winnerIndex(0,0)).toBe(-1); expect(segmentPath(0,1)).toContain('A 278 278'); });
+  it('yields at actual pins in both directions and clears away from contact', () => { expect(pointerDeflection(-1.5,12,1)).toBeCloseTo(-23); expect(pointerDeflection(1.5,12,-1)).toBeCloseTo(23); expect(pointerDeflection(15,12,1)).toBe(0); expect(pointerDeflection(0,12,0)).toBe(0); expect(pointerDeflection(1078.5,12,1)).toBeCloseTo(-23); });
 });
 describe('wheel physics', () => {
   it('estimates signed speed and ignores stale release', () => { const s=[{time:0,angle:0},{time:50,angle:20},{time:100,angle:40}]; expect(releaseVelocity(s,100)).toBeCloseTo(400); expect(releaseVelocity(s.map(x=>({...x,angle:-x.angle})),100)).toBeCloseTo(-400); expect(releaseVelocity(s,250)).toBe(0); });
   it('conserves exact frame-independent exponential trajectory', () => { const full=advance(0,1000,1); let r=0,v=1000; for(let i=0;i<120;i++) { const step=advance(r,v,1/120); r=step.rotation; v=step.velocity; } expect(r).toBeCloseTo(full.rotation,8); expect(v).toBeCloseTo(full.velocity,8); });
-  it('slows smoothly in either direction and stops without snapping', () => { for(const direction of [-1,1]) { let r=0,v=direction*800; for(let i=0;i<2000&&v;i++) { const step=advance(r,v,1/60); expect(Math.abs(step.velocity)).toBeLessThan(Math.abs(v)); expect(direction*(step.rotation-r)).toBeGreaterThanOrEqual(0); r=step.rotation; v=step.velocity; } expect(v).toBe(0); expect(r).toBeCloseTo(direction*(800-4)/FRICTION,5); } });
+  it('slows smoothly in either direction and stops without snapping', () => { for(const direction of [-1,1]) { let r=0,v=direction*800; for(let i=0;i<2000&&v;i++) { const step=advance(r,v,1/60); expect(Math.abs(step.velocity)).toBeLessThan(Math.abs(v)); expect(direction*(step.rotation-r)).toBeGreaterThanOrEqual(0); r=step.rotation; v=step.velocity; } expect(v).toBe(0); expect(r).toBeCloseTo(direction*(800-STOP_SPEED)/FRICTION,5); } });
+  it('builds suspense with a longer gentle coast and sub-degree final movement', () => { expect(Math.log(800/STOP_SPEED)/FRICTION).toBeGreaterThan(15); const slow=advance(100,2,1/60); expect(slow.rotation-100).toBeLessThan(.04); expect(advance(0,0,1)).toEqual({rotation:0,velocity:0}); });
   it('fast release travels farther than slow release', () => { expect(advance(0,1200,20).rotation).toBeGreaterThan(advance(0,200,20).rotation*5); });
 });
 describe('local wheel store', () => {
