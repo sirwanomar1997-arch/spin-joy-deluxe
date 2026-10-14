@@ -11,6 +11,7 @@
 
 ## Application architecture
 - Keep wheel geometry, release-velocity estimation, inertia, audio and local persistence in separate browser-safe wheel modules so geometry and physics can be tested independently.
+- Measure segment labels by Unicode grapheme clusters and render emoji runs separately so joined emojis remain intact and fit their wedge.
 - Use one pointer-driven requestAnimationFrame rotation owner; derive results from the same final rotation and fixed top pointer, never from a separate random selection.
 - Derive hinged pointer contact from boundary-aligned rim pins in the same rotation paint loop; keep the mount fixed and preserve the exact unwrapped final wheel angle to avoid apparent result jumps.
 - Keep the wheel library in a validated versioned local store shared by a root provider; only update committed UI state after a successful storage write to avoid false save confirmations.

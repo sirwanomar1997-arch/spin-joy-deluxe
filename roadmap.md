@@ -9,3 +9,4 @@
 - [x] Refine wheel materials without casino styling and verify visual and spin behavior.
 - [x] Extend natural coast-down and add synchronized rim-pin / hinged-pointer contact.
 - [x] Refine shining stars and verify spin, winner alignment and reduced effects.
+- [ ] Replace Safir with pink, enlarge emojis, enrich audio and refine gold winner/rim details; verify together.
