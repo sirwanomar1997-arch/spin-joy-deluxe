@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type PointerEvent } from 'react';
 import { angleDelta, pointerDeflection, winnerIndex } from './geometry';
 import { advance, releaseVelocity, STOP_SPEED, type Sample } from './physics';
 import { WheelAudio } from './audio';
+import { detectLang, translations } from './i18n';
 export function useWheelMotion(segments: string[], sound: boolean) {
   const svgRef = useRef<SVGSVGElement>(null);
   const pointerRef = useRef<SVGGElement>(null);
