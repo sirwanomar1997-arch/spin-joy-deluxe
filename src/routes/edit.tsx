@@ -17,7 +17,9 @@ function Edit() {
   const navigate = useNavigate();
   useEffect(() => { if (ready) { setTitle(active.title); setSegments([...active.segments]); } }, [ready, active.id]);
   function save() {
-    if (commit({ ...store, wheels: store.wheels.map(w => w.id === active.id ? { ...w, title: title.trim(), segments } : w) })) void navigate({ to: '/' });
+    // Ändringar sparas alltid som ett NYTT hjul — det gamla ligger kvar i Mina hjul tills användaren raderar det manuellt.
+    const created = { ...newWheel(), title: title.trim(), segments };
+    if (commit({ ...store, wheels: [...store.wheels, created], activeId: created.id })) void navigate({ to: '/' });
   }
   function resize(count: number) { const n = Math.min(24, Math.max(1, count)); setSegments(s => Array.from({ length: n }, (_, i) => s[i] ?? '')); }
   return <Screen title="Redigera hjul" eyebrow="DITT HJUL" action={<Button onClick={save} disabled={!ready}><Check />Klar</Button>}>
