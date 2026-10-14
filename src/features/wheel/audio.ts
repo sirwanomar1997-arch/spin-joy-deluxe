@@ -3,10 +3,10 @@ export class WheelAudio {
   unlock() {
     try {
       // iOS: play through the silent switch like a media app instead of as a muted ringer sound.
-      const session = (navigator as Navigator & { audioSession?: { type: string } }).audioSession;
+      const session = (globalThis.navigator as Navigator | undefined as & { audioSession?: { type: string } }).audioSession;
       if (session && session.type !== 'playback') session.type = 'playback';
       if (!this.context || this.context.state === 'closed') {
-        const Ctx = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+        const Ctx = globalThis.AudioContext ?? (globalThis as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
         this.context = new Ctx({ latencyHint: 'interactive' });
       }
       void this.context.resume().catch(() => {});
