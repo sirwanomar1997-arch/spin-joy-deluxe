@@ -16,5 +16,5 @@
 - [x] Clone the project onto the Mac from the public GitHub repository.
 - [x] Generate the iOS app icon, then archive and upload to App Store Connect.
 - [x] Fill in the iOS app listing and submit it for review.
-- [pågår] Google Play: innehållsklassificeringen är inskickad och klar (13/13). Kvar: Testa och lansera → Produktion → Skapa ny release med app-release.aab från Dokument, sedan skicka till granskning. Nytt personligt konto kan kräva slutet test med 12 testare i 14 dagar före produktion.
+- [pågår] Google Play: checklistan 13/13 klar, innehållsklassificering inskickad. Ny korrekt app-release.aab byggd (BUILD SUCCESSFUL) — ska laddas upp i Testa och lansera → Produktion → Skapa ny release, sedan skicka till granskning. Nytt personligt konto kan kräva slutet test med 12 testare i 14 dagar före produktion.
 - [ ] Submit both stores for review with price 20 SEK, age 13+, privacy link.
