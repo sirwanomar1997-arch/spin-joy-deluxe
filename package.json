@@ -11,7 +11,10 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "app:setup": "bash scripts/setup-app.sh",
+    "app:ios": "npx cap open ios",
+    "app:android": "npx cap open android"
   },
   "overrides": {
     "rolldown": "1.2.1"
