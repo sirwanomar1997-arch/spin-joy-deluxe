@@ -4,7 +4,7 @@
 - [x] Check native update path: repository Capacitor config loads the published website, so these web-only changes may not require a new native upload.
 - [x] Keep the home title capsule visible when empty, showing a soft "Din titel" placeholder; verified empty and filled states.
 - [ ] Publish the correction (empty start wheel, safe-area spacing, always-visible title field), then confirm it in the user's installed TestFlight app; waiting on an explicit go-ahead to publish and an actual-device check.
-- [ ] New app icon: polished candidates ready in assets/ (droplet version icon-candidate-1b.png, gold-loop version icon-candidate-2c.png). The icon lives inside the app file, so swapping it needs a new build; the user has no energy for a build now, so the current App Store and Google Play submissions keep the old icon. Swap later by replacing assets/icon.png and rerunning scripts/setup-app.sh.
+- [ ] New app icon: polished candidates ready in assets/ (droplet version icon-candidate-1b.png, gold-loop version icon-candidate-2c.png). The icon lives inside the app file, so swapping it needs a new build; the user has no energy for a build now, so the current App Store and Google Play submissions keep the old icon. Swap later by replacing assets/icon.png and rerunning scripts/setup-app.sh. Default kept: gold-loop icon-candidate-2c.png (verified crisp at 32px); the user skipped choosing.
 - [x] Build premium dynamic wheel and signed drag/inertia physics.
 - [x] Build editing, settings and persistent local wheel library.
 - [x] Verify geometry, storage and full interaction on mobile and desktop.
