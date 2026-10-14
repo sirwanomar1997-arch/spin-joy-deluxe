@@ -10,5 +10,5 @@
 - [x] Extend natural coast-down and add synchronized rim-pin / hinged-pointer contact.
 - [x] Refine shining stars and verify spin, winner alignment and reduced effects.
 - [x] Replace Safir with pink, enlarge emojis, enrich audio and refine gold winner/rim details; verify together.
-- [ ] Remove waterfall-like spin noise while preserving clicks and winner tones.
-- [ ] Refine tapered winner light streak and reflective dark-metal/gold rim; verify real spin.
+- [x] Remove waterfall-like spin noise while preserving clicks and winner tones.
+- [x] Refine tapered winner light streak and reflective dark-metal/gold rim; verify real spin.
