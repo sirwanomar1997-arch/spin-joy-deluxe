@@ -18,7 +18,7 @@ export function Wheel({ wheel, sound, onBusy }: { wheel: WheelConfig; sound: boo
         <svg ref={motion.svgRef} className="rotating-wheel" viewBox="0 0 600 600" role="img" aria-label={`${count} lika stora segment`} data-rotation="0">
           <defs>
             <linearGradient id={`${uid}-rim`} x1="0" y1="0" x2="1" y2="1"><stop className="metal-medium" offset="0" /><stop className="metal-light" offset=".18" /><stop className="metal-dark" offset=".36" /><stop className="metal-medium" offset=".65" /><stop className="metal-light" offset=".82" /><stop className="metal-dark" offset="1" /></linearGradient>
-            <linearGradient id={`${uid}-rim-gold`} x1="0" y1="0" x2="1" y2="1"><stop className="gold-deep" offset="0" /><stop className="gold-light" offset=".18" /><stop className="gold-bright" offset=".32" /><stop className="gold-deep" offset=".5" /><stop className="gold-light" offset=".73" /><stop className="gold-bright" offset=".86" /><stop className="gold-deep" offset="1" /></linearGradient>
+            <linearGradient id={`${uid}-rim-gold`} x1="0" y1="0" x2="1" y2="1"><stop className="rim-gold-shadow" offset="0" /><stop className="rim-gold-mid" offset=".12" /><stop className="rim-gold-light" offset=".22" /><stop className="rim-gold-mid" offset=".28" /><stop className="rim-gold-shadow" offset=".42" /><stop className="rim-gold-mid" offset=".57" /><stop className="rim-gold-light" offset=".72" /><stop className="rim-gold-mid" offset=".79" /><stop className="rim-gold-shadow" offset="1" /></linearGradient>
             {Array.from({ length: 7 }, (_, i) => <radialGradient key={i} id={`${uid}-enamel-${i}`} cx=".38" cy=".28" r=".8"><stop className={`enamel-light segment-${i}`} offset="0" /><stop className={`enamel-base segment-${i}`} offset=".55" /><stop className={`enamel-deep segment-${i}`} offset="1" /></radialGradient>)}
             <radialGradient id={`${uid}-glass`} cx=".35" cy=".2" r=".9"><stop className="glass-highlight" offset="0" /><stop className="glass-clear" offset=".4" /><stop className="glass-shadow" offset="1" /></radialGradient>
             <linearGradient id={`${uid}-hub`} x1="0" y1="0" x2="1" y2="1"><stop className="metal-medium" offset="0" /><stop className="metal-dark" offset=".4" /><stop className="metal-medium" offset=".51" /><stop className="metal-dark" offset=".7" /><stop className="metal-medium" offset="1" /></linearGradient>
@@ -26,9 +26,9 @@ export function Wheel({ wheel, sound, onBusy }: { wheel: WheelConfig; sound: boo
             {wheel.segments.map((_, i) => <clipPath id={`${uid}-clip-${i}`} key={i}><path d={segmentPath(i, count)} /></clipPath>)}
           </defs>
           <circle cx="300" cy="300" r="293" fill={`url(#${uid}-rim)`} className="rim-outline" />
-          <circle cx="300" cy="300" r="292" fill="none" stroke={`url(#${uid}-rim-gold)`} strokeWidth="5" />
+          <circle cx="300" cy="300" r="291" fill="none" stroke={`url(#${uid}-rim-gold)`} strokeWidth="7" />
           <circle cx="300" cy="300" r="290" className="rim-hairline" />
-          <circle cx="300" cy="300" r="284" className="rim-inlay" />
+          <circle cx="300" cy="300" r="284" className="rim-inlay" stroke={`url(#${uid}-rim-gold)`} />
           <circle cx="300" cy="300" r="282" className="inner-rim" />
           {wheel.segments.map((label, i) => {
             const middle = -90 + (i + .5) * 360 / count;
