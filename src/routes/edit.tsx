@@ -4,7 +4,7 @@ import { Check, Library, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Screen } from '@/features/wheel/Screen';
 import { useWheels } from '@/features/wheel/context';
-import { DEFAULT_WHEEL } from '@/features/wheel/storage';
+import { DEFAULT_WHEEL, newWheel } from '@/features/wheel/storage';
 export const Route = createFileRoute('/edit')({
   head: () => ({ meta: [{ title: 'Redigera hjul · Spin the Wheel Deluxe' }, { name: 'description', content: 'Anpassa titel och lika stora segment på ditt eget lyckohjul.' }, { property: 'og:title', content: 'Redigera hjul · Spin the Wheel Deluxe' }, { property: 'og:description', content: 'Skapa ett personligt lyckohjul med egna alternativ.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' }] }),
   component: Edit,
