@@ -22,5 +22,5 @@
 - [x] Clone the project onto the Mac from the public GitHub repository.
 - [x] Generate the iOS app icon, then archive and upload to App Store Connect.
 - [x] Fill in the iOS app listing and submit it for review.
-- [pågår] Google Play: uppladdningsnyckelbytet trädde i kraft fredag 16 okt kl 19:08 och tiden är nu passerad (lördag 17 okt) — uppladdning är öppen. Filen spin-joy-deluxe-1.0.aab (18 408 433 byte) ligger i Dokument på mobilen. Testa och lansera → Produktion → Skapa ny release → ladda upp filen → skicka till granskning. Nytt personligt konto kan kräva slutet test med 12 testare i 14 dagar före produktion.
+- [pågår] Google Play: AAB 1.0 uppladdad och tillgänglig för interna testare. Slutet test blockerat av "Versionskoden 1 har redan använts" vid ny uppladdning — lös utan ombyggnad: kopiera release från intern test till slutet test, eller ta bort intern test-releasen så blir kod 1 ledig. Behövs högre kod krävs nytt bygge på Macen (sändes inte hit — sandbox saknar Java/Android SDK).
 - [ ] Submit both stores for review with price 20 SEK, age 13+, privacy link.
